@@ -5,6 +5,12 @@ import fetch from 'isomorphic-unfetch';
 const Post = props => (
   <Layout>
     <h1>{props.song.title}</h1>
+    <div className="song-spotify">
+      <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
+    <div className="song-youtube">
+      <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
+    </div>
     <div className="markdown">
       <Markdown
         source={props.song.background}

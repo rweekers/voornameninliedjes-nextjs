@@ -9,7 +9,6 @@ module.exports = {
       };
       const res = await fetch('https://api.voornameninliedjes.nl/songs');
       const songs = await res.json();
-    //   const shows = data.map(entry => entry.show);
   
       songs.forEach(song => {
         paths[`/song/${song.id}`] = { page: '/song/[id]', query: { id: song.id } };
