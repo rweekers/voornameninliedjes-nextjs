@@ -2,7 +2,7 @@ import Layout from '../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 
-const Post = props => (
+const Song = props => (
   <Layout>
     <div className="Songdetail">
       <header className="song-title"><h1>{props.song.artist}</h1><h2>{props.song.title}</h2></header>
@@ -26,6 +26,7 @@ const Post = props => (
               src={`https://farm${props.photo.farm}.staticflickr.com/${props.photo.server}/${props.photo.id}_${props.photo.secret}_c.jpg`}
               alt={props.photo.title}
             />
+              <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
             </div>
           )}
       </aside>
@@ -138,7 +139,7 @@ const Post = props => (
   </Layout>
 );
 
-Post.getInitialProps = async function (context) {
+Song.getInitialProps = async function (context) {
   const API = 'https://api.voornameninliedjes.nl/songs/';
   const FLICKR_PHOTO_DETAIL = 'https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true&photo_id=';
   const FLICKR_USER_DETAIL = 'https://api.flickr.com/services/rest/?method=flickr.people.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true&user_id=';
@@ -174,40 +175,43 @@ Post.getInitialProps = async function (context) {
     const photoRes = await fetch(FLICKR_PHOTO_DETAIL + song.flickrPhotos[0]);
     const photoR = await photoRes.json();
     photo = await photoR.photo;
-    console.log(photo);
 
-    const owner = await photo.owner;
-    console.log(owner);
+    const ownerR = await photo.owner;
 
-    // const photoRes2 = await photoRes.json().data;
-    // photo = photoRes2.photo;
-    // console.log(photoRes2);
-    // console.log(photo.photo);
-    // const ownerRes = await fetch(FLICKR_USER_DETAIL + photo.owner.license);
-    // const owner = await ownerRes.json();
-    // console.log(owner);
+    const b = await fetch(`${FLICKR_USER_DETAIL}${ownerR.nsid}`);
+    const c = await b.json();
+    owner = c.person;
+    const username = c.person.username._content;
+    const photosurl = c.person.photosurl._content;
 
-    // const licensesRes = await fetch(FLICKR_LICENCES);
+    const licencesRes = await fetch(FLICKR_LICENCES);
+    const licenses = await licencesRes.json();
 
-    // const licenses = await licensesRes.json();//.data.licenses.license;
+    const license = licenses.licenses.license.find(x => x.id === photo.license);
+    const licenseName = license.name;
+    const licenseUrl = license.url;
 
-    // const license = licenses.find(x => x.id === photo.license);
-    // const licenseName = license.name;
-    // const licenseUrl = license.url;
-
-    // contribution.ownerName = owner.username._content;
-    // contribution.ownerUrl = owner.photosurl._content;
-    // contribution.photoTitle = photo.title._content;
-    // contribution.photoUrl = photo.urls.url[0]._content;
-    // contribution.licenseName = licenseName;
-    // contribution.licenseUrl = licenseUrl;
+    contribution = {
+      'ownerName': username,
+      'ownerUrl': photosurl,
+      'photoTitle': photo.title,
+      'photoUrl': photo.urls.url[0],
+      'licenseName': licenseName,
+      'licenseUrl': licenseUrl
+    };
   }
 
   console.log(`Fetched song: ${song.title}`);
 
-  console.log(`wiki photo url ${wikiPhotoUrl} with attribution ${wikiPhotoAttribution}`);
+  if (hasWikiPhoto) {
+    console.log(`wiki photo url ${wikiPhotoUrl} with attribution ${wikiPhotoAttribution}`);
+  } else {
+    console.log(photo);
+    console.log(owner);
+    console.log(contribution);
+  }
 
   return { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, contribution, photo, owner };
 };
 
-export default Post;
+export default Song;
