@@ -1,5 +1,4 @@
 import Layout from '../../components/MyLayout';
-import axios from "axios";
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 
@@ -17,18 +16,16 @@ const Post = props => (
       <aside className="song-photos">
         {props.hasWikiPhoto ? (
           <div>
-              <img
-                src={props.wikiPhotoUrl} alt={props.song.artist}
-              />
-              <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
-            </div>
+            <img
+              src={props.wikiPhotoUrl} alt={props.song.artist}
+            />
+            <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
+          </div>
         ) : (
-            <div>
-              <img
-                src={`https://farm${props.photo.farm}.staticflickr.com/${props.photo.server}/${props.photo.id}_${props.photo.secret}_c.jpg`}
-                alt={props.photo.title}
-              />
-              <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
+            <div>                <img
+              src={`https://farm${props.photo.farm}.staticflickr.com/${props.photo.server}/${props.photo.id}_${props.photo.secret}_c.jpg`}
+              alt={props.photo.title}
+            />
             </div>
           )}
       </aside>
@@ -164,7 +161,7 @@ Post.getInitialProps = async function (context) {
   let owner;
 
   const { id } = context.query;
-  const res = await fetch(`https://api.voornameninliedjes.nl/songs/${id}`);
+  const res = await fetch(`${API}${id}`);
   const song = await res.json();
 
   if (song.wikimediaPhotos.length > 0) {
@@ -174,31 +171,41 @@ Post.getInitialProps = async function (context) {
     wikiPhotoUrl = wikiPhoto.url;
     wikiPhotoAttribution = wikiPhoto.attribution;
   } else {
-    axios.get(FLICKR_PHOTO_DETAIL + song.flickrPhotos[0])
-      .then(res => {
-        photo = res.data.photo;
-        axios.get(FLICKR_USER_DETAIL + photo.owner.nsid)
-          .then(res => {
-            owner = res.data.person;
-            axios.get(FLICKR_LICENCES)
-              .then(res => {
-                const licenses = res.data.licenses.license;
-                const license = licenses.find(x => x.id === photo.license);
-                const licenseName = license.name;
-                const licenseUrl = license.url;
+    const photoRes = await fetch(FLICKR_PHOTO_DETAIL + song.flickrPhotos[0]);
+    const photoR = await photoRes.json();
+    photo = await photoR.photo;
+    console.log(photo);
 
-                contribution.ownerName = owner.username._content;
-                contribution.ownerUrl = owner.photosurl._content;
-                contribution.photoTitle = photo.title._content;
-                contribution.photoUrl = photo.urls.url[0]._content;
-                contribution.licenseName = licenseName;
-                contribution.licenseUrl = licenseUrl;
-              })
-          })
-      })
+    const owner = await photo.owner;
+    console.log(owner);
+
+    // const photoRes2 = await photoRes.json().data;
+    // photo = photoRes2.photo;
+    // console.log(photoRes2);
+    // console.log(photo.photo);
+    // const ownerRes = await fetch(FLICKR_USER_DETAIL + photo.owner.license);
+    // const owner = await ownerRes.json();
+    // console.log(owner);
+
+    // const licensesRes = await fetch(FLICKR_LICENCES);
+
+    // const licenses = await licensesRes.json();//.data.licenses.license;
+
+    // const license = licenses.find(x => x.id === photo.license);
+    // const licenseName = license.name;
+    // const licenseUrl = license.url;
+
+    // contribution.ownerName = owner.username._content;
+    // contribution.ownerUrl = owner.photosurl._content;
+    // contribution.photoTitle = photo.title._content;
+    // contribution.photoUrl = photo.urls.url[0]._content;
+    // contribution.licenseName = licenseName;
+    // contribution.licenseUrl = licenseUrl;
   }
 
   console.log(`Fetched song: ${song.title}`);
+
+  console.log(`wiki photo url ${wikiPhotoUrl} with attribution ${wikiPhotoAttribution}`);
 
   return { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, contribution, photo, owner };
 };
