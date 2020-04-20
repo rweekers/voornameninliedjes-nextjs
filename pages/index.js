@@ -17,14 +17,16 @@ const Index = props => (
   </Layout>
 );
 
-Index.getInitialProps = async function() {
+export async function getStaticProps() {
   const res = await fetch('https://api.voornameninliedjes.nl/songs');
   const data = await res.json();
 
   console.log(`Song data fetched. Count: ${data.length}`);
 
   return {
-    songs: data.map(entry => entry)
+    props: {
+      songs: data.map(entry => entry)
+    }
   };
 };
 

@@ -13,7 +13,7 @@ const Song = props => (
       <aside className="song-youtube">
         <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
       </aside>
-      <aside className="song-photos">
+      {/* <aside className="song-photos">
         {props.hasWikiPhoto ? (
           <div>
             <img
@@ -29,7 +29,7 @@ const Song = props => (
               <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
             </div>
           )}
-      </aside>
+      </aside> */}
     </div>
     <style jsx>{`
     .Songdetail {
@@ -139,7 +139,25 @@ const Song = props => (
   </Layout>
 );
 
-Song.getInitialProps = async function (context) {
+export async function getStaticPaths() {
+  // Call an external API endpoint to get posts
+  const res = await fetch('https://api.voornameninliedjes.nl/songs');
+  const songs = await res.json();
+
+  console.log(songs);
+
+  // Get the paths we want to pre-render based on songs
+  const paths = songs.map(song => ({
+    params: { id: song.id },
+  }));
+  // const paths = songs.map(song => `/song/${song.id}`)
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: false } means other routes should 404.
+  return { paths, fallback: false }
+}
+
+export async function getStaticProps({ params }) {
   const API = 'https://api.voornameninliedjes.nl/songs/';
   const FLICKR_PHOTO_DETAIL = 'https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true&photo_id=';
   const FLICKR_USER_DETAIL = 'https://api.flickr.com/services/rest/?method=flickr.people.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true&user_id=';
@@ -161,57 +179,57 @@ Song.getInitialProps = async function (context) {
   let photo;
   let owner;
 
-  const { id } = context.query;
-  const res = await fetch(`${API}${id}`);
+  const res = await fetch(`${API}${params.id}`);
   const song = await res.json();
 
-  if (song.wikimediaPhotos.length > 0) {
-    const wikiPhoto = song.wikimediaPhotos[0];
+  // if (song.wikimediaPhotos.length > 0) {
+  //   const wikiPhoto = song.wikimediaPhotos[0];
 
-    hasWikiPhoto = true;
-    wikiPhotoUrl = wikiPhoto.url;
-    wikiPhotoAttribution = wikiPhoto.attribution;
-  } else {
-    const photoRes = await fetch(FLICKR_PHOTO_DETAIL + song.flickrPhotos[0]);
-    const photoR = await photoRes.json();
-    photo = await photoR.photo;
+  //   hasWikiPhoto = true;
+  //   wikiPhotoUrl = wikiPhoto.url;
+  //   wikiPhotoAttribution = wikiPhoto.attribution;
+  // } else {
+  //   const photoRes = await fetch(FLICKR_PHOTO_DETAIL + song.flickrPhotos[0]);
+  //   const photoR = await photoRes.json();
+  //   photo = await photoR.photo;
 
-    const ownerR = await photo.owner;
+  //   const ownerR = await photo.owner;
 
-    const b = await fetch(`${FLICKR_USER_DETAIL}${ownerR.nsid}`);
-    const c = await b.json();
-    owner = c.person;
-    const username = c.person.username._content;
-    const photosurl = c.person.photosurl._content;
+  //   const b = await fetch(`${FLICKR_USER_DETAIL}${ownerR.nsid}`);
+  //   const c = await b.json();
+  //   owner = c.person;
+  //   const username = c.person.username._content;
+  //   const photosurl = c.person.photosurl._content;
 
-    const licencesRes = await fetch(FLICKR_LICENCES);
-    const licenses = await licencesRes.json();
+  //   const licencesRes = await fetch(FLICKR_LICENCES);
+  //   const licenses = await licencesRes.json();
 
-    const license = licenses.licenses.license.find(x => x.id === photo.license);
-    const licenseName = license.name;
-    const licenseUrl = license.url;
+  //   const license = licenses.licenses.license.find(x => x.id === photo.license);
+  //   const licenseName = license.name;
+  //   const licenseUrl = license.url;
 
-    contribution = {
-      'ownerName': username,
-      'ownerUrl': photosurl,
-      'photoTitle': photo.title,
-      'photoUrl': photo.urls.url[0],
-      'licenseName': licenseName,
-      'licenseUrl': licenseUrl
-    };
-  }
+  //   contribution = {
+  //     'ownerName': username,
+  //     'ownerUrl': photosurl,
+  //     'photoTitle': photo.title,
+  //     'photoUrl': photo.urls.url[0],
+  //     'licenseName': licenseName,
+  //     'licenseUrl': licenseUrl
+  //   };
+  // }
 
   console.log(`Fetched song: ${song.title}`);
 
-  if (hasWikiPhoto) {
-    console.log(`wiki photo url ${wikiPhotoUrl} with attribution ${wikiPhotoAttribution}`);
-  } else {
-    console.log(photo);
-    console.log(owner);
-    console.log(contribution);
-  }
+  // if (hasWikiPhoto) {
+  //   console.log(`wiki photo url ${wikiPhotoUrl} with attribution ${wikiPhotoAttribution}`);
+  // } else {
+  //   console.log(photo);
+  //   console.log(owner);
+  //   console.log(contribution);
+  // }
 
-  return { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, contribution, photo, owner };
+  // return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, contribution, photo, owner } };
+  return { props: { song } };
 };
 
 export default Song;
