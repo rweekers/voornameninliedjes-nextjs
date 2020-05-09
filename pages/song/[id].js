@@ -13,6 +13,24 @@ const Song = props => (
       <aside className="song-youtube">
         <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
       </aside>
+      <aside className="song-photos">
+        {props.hasWikiPhoto ? (
+          <div>
+            <img
+              src={props.wikiPhotoUrl} alt={props.song.artist}
+            />
+            <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
+          </div>
+        ) : (
+            <div>
+              <img
+                src={props.photo.url}
+                alt={props.photo.title}
+              />
+              <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
+            </div>
+          )}
+      </aside>
       {/* <aside className="song-photos">
         {props.hasWikiPhoto ? (
           <div>
@@ -159,14 +177,12 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const API = 'https://api.voornameninliedjes.nl/songs/';
-  const FLICKR_PHOTO_DETAIL = 'https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true&photo_id=';
-  const FLICKR_USER_DETAIL = 'https://api.flickr.com/services/rest/?method=flickr.people.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true&user_id=';
-  const FLICKR_LICENCES = 'https://api.flickr.com/services/rest/?method=flickr.photos.licenses.getInfo&api_key=9676a28e9cb321d2721e813055abb6dc&format=json&nojsoncallback=true'
 
   let hasWikiPhoto = false;
   let wikiPhotoUrl = '';
   let wikiPhotoAttribution = '';
 
+  let photo = '';
   let contribution = {
     "ownerName": '',
     "ownerUrl": '',
@@ -176,60 +192,31 @@ export async function getStaticProps({ params }) {
     "licenseUrl": ''
   }
 
-  let photo;
-  let owner;
-
   const res = await fetch(`${API}${params.id}`);
   const song = await res.json();
 
-  // if (song.wikimediaPhotos.length > 0) {
-  //   const wikiPhoto = song.wikimediaPhotos[0];
-
-  //   hasWikiPhoto = true;
-  //   wikiPhotoUrl = wikiPhoto.url;
-  //   wikiPhotoAttribution = wikiPhoto.attribution;
-  // } else {
-  //   const photoRes = await fetch(FLICKR_PHOTO_DETAIL + song.flickrPhotos[0]);
-  //   const photoR = await photoRes.json();
-  //   photo = await photoR.photo;
-
-  //   const ownerR = await photo.owner;
-
-  //   const b = await fetch(`${FLICKR_USER_DETAIL}${ownerR.nsid}`);
-  //   const c = await b.json();
-  //   owner = c.person;
-  //   const username = c.person.username._content;
-  //   const photosurl = c.person.photosurl._content;
-
-  //   const licencesRes = await fetch(FLICKR_LICENCES);
-  //   const licenses = await licencesRes.json();
-
-  //   const license = licenses.licenses.license.find(x => x.id === photo.license);
-  //   const licenseName = license.name;
-  //   const licenseUrl = license.url;
-
-  //   contribution = {
-  //     'ownerName': username,
-  //     'ownerUrl': photosurl,
-  //     'photoTitle': photo.title,
-  //     'photoUrl': photo.urls.url[0],
-  //     'licenseName': licenseName,
-  //     'licenseUrl': licenseUrl
-  //   };
-  // }
+  if (song.wikimediaPhotos.length > 0) {
+    const wikiPhoto = song.wikimediaPhotos[0];
+    hasWikiPhoto = true;
+    wikiPhotoUrl = wikiPhoto.url;
+    wikiPhotoAttribution = wikiPhoto.attribution;
+  } else {
+    const flickrPhoto = song.flickrPhotos[0];
+    photo = flickrPhoto;
+    contribution = {
+      'ownerName': flickrPhoto.owner.username,
+      'ownerUrl': flickrPhoto.owner.url,
+      'photoTitle': flickrPhoto.title,
+      'photoUrl': flickrPhoto.url,
+      'licenseName': flickrPhoto.license.name,
+      'licenseUrl': flickrPhoto.license.url
+    };
+  }
 
   console.log(`Fetched song: ${song.title}`);
 
-  // if (hasWikiPhoto) {
-  //   console.log(`wiki photo url ${wikiPhotoUrl} with attribution ${wikiPhotoAttribution}`);
-  // } else {
-  //   console.log(photo);
-  //   console.log(owner);
-  //   console.log(contribution);
-  // }
-
   // return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, contribution, photo, owner } };
-  return { props: { song } };
+  return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
 };
 
 export default Song;
