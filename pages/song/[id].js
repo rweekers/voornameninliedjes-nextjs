@@ -31,26 +31,9 @@ const Song = props => (
             </div>
           )}
       </aside>
-      {/* <aside className="song-photos">
-        {props.hasWikiPhoto ? (
-          <div>
-            <img
-              src={props.wikiPhotoUrl} alt={props.song.artist}
-            />
-            <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
-          </div>
-        ) : (
-            <div>                <img
-              src={`https://farm${props.photo.farm}.staticflickr.com/${props.photo.server}/${props.photo.id}_${props.photo.secret}_c.jpg`}
-              alt={props.photo.title}
-            />
-              <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
-            </div>
-          )}
-      </aside> */}
     </div>
     <style jsx>{`
-    .Songdetail {
+.Songdetail {
   display: grid;
   background-color: black;
   background-size: 100%;
@@ -205,7 +188,7 @@ export async function getStaticProps({ params }) {
     photo = flickrPhoto;
     contribution = {
       'ownerName': flickrPhoto.owner.username,
-      'ownerUrl': flickrPhoto.owner.url,
+      'ownerUrl': flickrPhoto.owner.photoUrl,
       'photoTitle': flickrPhoto.title,
       'photoUrl': flickrPhoto.url,
       'licenseName': flickrPhoto.license.name,
@@ -215,7 +198,6 @@ export async function getStaticProps({ params }) {
 
   console.log(`Fetched song: ${song.title}`);
 
-  // return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, contribution, photo, owner } };
   return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
 };
 
