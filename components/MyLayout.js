@@ -1,4 +1,6 @@
 import Header from './Header'
+import Aside from './Aside'
+import Footer from './Footer'
 
 const layoutStyle = {
   // styling here
@@ -11,12 +13,12 @@ export default function Layout(props) {
   return (
     <div className="app">
       <Header />
-      <aside className="app-side-left" />
-      <aside className="app-side-right" />
+      <Aside className="app-side-left" />
+      <Aside className="app-side-right" />
       <content className="app-section">
         {props.children}
       </content>
-      <footer className="app-footer"><p></p><div><h1>&copy; 2020 OrangeFlamingo </h1><a id="footerText" href="http://foo.bar">e-mail</a></div><a href="https://freebsd.org" target="blank"><img src="/freebsd-logo.png" className="freebsd-logo" alt="logo-freebsd" /></a></footer>
+      <Footer />
       <style global jsx>{`
 
 * {
@@ -112,16 +114,17 @@ html {
 }
 
 .app-side-left {
-  grid-area: sidebar-two;
+  grid-area: sidebar-one;
   background-image: url('left.jpeg');
-  background-position: center;
-  background-repeat: no-repeat;
+  background-position: top left;
   background-size: 500px;
 }
+
 .app-side-right {
-  grid-area: sidebar-one;
+  grid-area: sidebar-two;
   background-image: url('right.jpeg');
-  background-position: top left;
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: 500px;
 }
 
