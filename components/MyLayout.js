@@ -24,6 +24,7 @@ export default function Layout(props) {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html {
@@ -59,7 +60,7 @@ html {
   display: flex;
   justify-content: space-between;
   background-color: black;
-  background-image: url('./public/header.jpeg');
+  background-image: url('/header.jpeg');
   background-size: cover;
   height: 100%;
 }
@@ -115,14 +116,14 @@ html {
 
 .app-side-left {
   grid-area: sidebar-one;
-  background-image: url('left.jpeg');
+  background-image: url('/left.jpeg');
   background-position: top left;
   background-size: 500px;
 }
 
 .app-side-right {
   grid-area: sidebar-two;
-  background-image: url('right.jpeg');
+  background-image: url('/right.jpeg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 500px;
@@ -169,7 +170,7 @@ html {
   to {
     transform: rotate(360deg);
   }
-} 
+}
 `}</style>
     </div>
   )

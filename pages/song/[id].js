@@ -145,8 +145,6 @@ export async function getStaticPaths() {
   const res = await fetch('https://api.voornameninliedjes.nl/songs');
   const songs = await res.json();
 
-  console.log(songs);
-
   // Get the paths we want to pre-render based on songs
   const paths = songs.map(song => ({
     params: { id: song.id },
@@ -175,6 +173,7 @@ export async function getStaticProps({ params }) {
     "licenseUrl": ''
   }
 
+  console.log(`Gotten param id ${params.id}`);
   const res = await fetch(`${API}${params.id}`);
   const song = await res.json();
 
