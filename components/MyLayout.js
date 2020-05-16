@@ -1,6 +1,7 @@
 import Header from './Header'
 import Aside from './Aside'
 import Footer from './Footer'
+import ScriptHeader from './ScriptHeader'
 
 const layoutStyle = {
   // styling here
@@ -12,6 +13,7 @@ export default function Layout(props) {
 
   return (
     <div className="app">
+      <ScriptHeader />
       <Header />
       <Aside className="app-side-left" />
       <Aside className="app-side-right" />
