@@ -1,17 +1,10 @@
-.Songlist {
-  font-size: 1.0em;
-  font-weight: 150;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-ul {
-  list-style-type: none;
-}
-
-.Songlist a {
-  color: white;
-  text-decoration: none;
-}
-
-.Songlist a:hover {
-  color: orange;  
+html {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 62.5%; /* font-size 1em = 10px on default browser settings */ 
 }

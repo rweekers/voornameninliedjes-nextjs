@@ -5,7 +5,7 @@ import fetch from 'isomorphic-unfetch';
 const Song = props => (
   <Layout>
     <div className="Songdetail">
-      <header className="song-title"><h1>{props.song.artist}</h1><h2>{props.song.title}</h2></header>
+      <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
       <content className="song-text"><Markdown source={props.song.background} /></content>
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>

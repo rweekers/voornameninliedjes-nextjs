@@ -1,4 +1,5 @@
-import Layout from '../components/MyLayout';
+import Layout from '../components/MyLayout'
+import Songrow from '../components/Songrow'
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch';
 
@@ -6,15 +7,11 @@ const Index = props => (
   <Layout>
     <div>
       <content className="app-section">
-        <div className="Songlist">
+        <div className="song-list">
           <ul>
             {props.songs.map(song =>
               <li key={song.id}>
-                <div className="Songrow">
-                  <Link href="/song/[id]" as={`/song/${song.id}`}>
-                    <a><p>{song.artist} - {song.title}</p></a>
-                  </Link>
-                </div>
+                <Songrow song={song} />
               </li>
             )}
           </ul>
@@ -25,8 +22,14 @@ const Index = props => (
     </div>
 
     <style jsx>{`
-// styling here
-      `}</style>
+.song-list {
+  padding-top: 3%;
+}
+
+.song-list ul {
+  list-style-type: none;
+}
+    `}</style>
   </Layout>
 );
 

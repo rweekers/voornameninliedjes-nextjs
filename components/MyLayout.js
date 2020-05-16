@@ -14,7 +14,7 @@ export default function Layout(props) {
   return (
     <div className="app">
       <ScriptHeader />
-      <Header />
+      <Header className="app-header" />
       <Aside className="app-side-left" />
       <Aside className="app-side-right" />
       <content className="app-section">
@@ -22,18 +22,6 @@ export default function Layout(props) {
       </content>
       <Footer />
       <style global jsx>{`
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  font-size: 62.5%; /* font-size 1em = 10px on default browser settings */ 
-}
-
 .app {
   display: grid;
   height: 100vh;
@@ -67,44 +55,7 @@ html {
   height: 100%;
 }
 
-.app-logo {
-  max-height: 60px;
-  padding: 0 0 0 10%;
-}
-
-.app-logo {
-  animation: appLogoSpin infinite 20s linear;
-}
-
-.app-header h1 {
-  color: #D4AF37;
-  font-family: Andale Mono, monospace;
-  font-size: 5.5em;
-  font-weight: 350;
-  padding: 0% 1% 0% 1%;
-}
-
-.app-header h1 span::before {
-  content: "\A";
-  white-space: pre;
-}
-
-@media (min-width: 1025px) {
-  .app-header h1 span::before {
-    content: normal;
-    white-space: normal;
-  }
-  .app-header {
-    background-image: none;
-    background-color: darkorange;
-  }
-  .app-header h1 {
-    color: black;
-  }
-}
-
 .app-section {
-  padding-top: 3%;
   padding-bottom: 1%;
   grid-area: content;
   background-color: #282c34;
@@ -162,15 +113,6 @@ html {
   }
   .app-side-left.app-side-right {
     display: inline;
-  }
-}
-
-@keyframes appLogoSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 `}</style>
