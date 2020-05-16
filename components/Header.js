@@ -26,7 +26,7 @@ export default function Header() {
   .app-header {
     background-image: none;
     background-color: darkorange;
-    height: 80px;
+    min-height: 80px;
   }
   .app-header h1 {
     color: black;
@@ -35,19 +35,14 @@ export default function Header() {
 
 .app-logo {
   max-height: 60px;
-  padding: 0 0 0 10%;
+  padding: 0 0 0 0%;
 }
 
 .app-logo {
-  animation: appLogoSpin infinite 20s linear;
-}
-
-@keyframes appLogoSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  animation: spin 20s infinite linear;
+  @keyframes spin {
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
   }
 }
       `}</style>
