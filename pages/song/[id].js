@@ -140,23 +140,23 @@ const Song = props => (
   </Layout>
 );
 
-export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch('https://api.voornameninliedjes.nl/songs');
-  const songs = await res.json();
+// export async function getStaticPaths() {
+//   // Call an external API endpoint to get posts
+//   const res = await fetch('https://api.voornameninliedjes.nl/songs');
+//   const songs = await res.json();
 
-  // Get the paths we want to pre-render based on songs
-  const paths = songs.map(song => ({
-    params: { id: song.id },
-  }));
-  // const paths = songs.map(song => `/song/${song.id}`)
+//   // Get the paths we want to pre-render based on songs
+//   const paths = songs.map(song => ({
+//     params: { id: song.id },
+//   }));
+//   // const paths = songs.map(song => `/song/${song.id}`)
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  return { paths, fallback: false }
-}
+//   // We'll pre-render only these paths at build time.
+//   // { fallback: false } means other routes should 404.
+//   return { paths, fallback: false }
+// }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps(context) {
   const API = 'https://api.voornameninliedjes.nl/songs/';
 
   let hasWikiPhoto = false;
@@ -173,8 +173,8 @@ export async function getStaticProps({ params }) {
     "licenseUrl": ''
   }
 
-  console.log(`Gotten param id ${params.id}`);
-  const res = await fetch(`${API}${params.id}`);
+  console.log(`Gotten param id ${context.query.id}`);
+  const res = await fetch(`${API}${context.query.id}`);
   const song = await res.json();
 
   if (song.wikimediaPhotos.length > 0) {
@@ -198,6 +198,50 @@ export async function getStaticProps({ params }) {
   console.log(`Fetched song: ${song.title}`);
 
   return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
-};
+}
+
+// export async function getStaticProps({ params }) {
+//   const API = 'https://api.voornameninliedjes.nl/songs/';
+
+//   let hasWikiPhoto = false;
+//   let wikiPhotoUrl = '';
+//   let wikiPhotoAttribution = '';
+
+//   let photo = '';
+//   let contribution = {
+//     "ownerName": '',
+//     "ownerUrl": '',
+//     "photoTitle": '',
+//     "photoUrl": '',
+//     "licenseName": '',
+//     "licenseUrl": ''
+//   }
+
+//   console.log(`Gotten param id ${params.id}`);
+//   const res = await fetch(`${API}${params.id}`);
+//   const song = await res.json();
+
+//   if (song.wikimediaPhotos.length > 0) {
+//     const wikiPhoto = song.wikimediaPhotos[0];
+//     hasWikiPhoto = true;
+//     wikiPhotoUrl = wikiPhoto.url;
+//     wikiPhotoAttribution = wikiPhoto.attribution;
+//   } else {
+//     const flickrPhoto = song.flickrPhotos[0];
+//     photo = flickrPhoto;
+//     contribution = {
+//       'ownerName': flickrPhoto.owner.username,
+//       'ownerUrl': flickrPhoto.owner.photoUrl,
+//       'photoTitle': flickrPhoto.title,
+//       'photoUrl': flickrPhoto.url,
+//       'licenseName': flickrPhoto.license.name,
+//       'licenseUrl': flickrPhoto.license.url
+//     };
+//   }
+
+//   console.log(`Fetched song: ${song.title}`);
+
+//   return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+// };
 
 export default Song;

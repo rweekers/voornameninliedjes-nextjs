@@ -30,7 +30,7 @@ const Index = props => (
   </Layout>
 );
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
   const res = await fetch('https://api.voornameninliedjes.nl/songs');
   const data = await res.json();
 
@@ -41,6 +41,19 @@ export async function getStaticProps() {
       songs: data.map(entry => entry)
     }
   };
-};
+}
+
+// export async function getStaticProps() {
+//   const res = await fetch('https://api.voornameninliedjes.nl/songs');
+//   const data = await res.json();
+
+//   console.log(`Song data fetched. Count: ${data.length}`);
+
+//   return {
+//     props: {
+//       songs: data.map(entry => entry)
+//     }
+//   };
+// };
 
 export default Index;
