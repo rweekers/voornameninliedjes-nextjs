@@ -3,7 +3,7 @@ export default function Header() {
     <header className="app-header">
       <a href='/'>
         <div className="app-logo-container">
-          <img src="../record_gold.png" className="app-logo" alt="logo" />
+          <img src="/record_gold.png" className="app-logo" alt="logo" />
         </div>
       </a>
       <h1>Voornamen <span>in liedjes</span></h1>
