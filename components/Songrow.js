@@ -2,8 +2,8 @@ import Link from 'next/link';
 import Markdown from 'react-markdown';
 
 function highLightName(artist, title, name) {
-  const markDownStart = '**_';
-  const markDownEnd = '_**';
+  const markDownStart = '**';
+  const markDownEnd = '**';
 
   const startIndex = title.indexOf(name);
   const endIndex = startIndex + name.length;
@@ -40,7 +40,8 @@ export default function Songrow(props) {
 }
 
 .song-row {
-  padding-bottom: 0.25em;
+  padding-top: 0.25em;
+  padding-bottom: 0.15em;
 }
 
 .song-row a {

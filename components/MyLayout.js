@@ -56,7 +56,7 @@ export default function Layout(props) {
 }
 
 .app-section {
-  padding-bottom: 1%;
+  padding-bottom: 0%;
   grid-area: content;
   background-color: #282c34;
   display: flex;
@@ -87,19 +87,6 @@ export default function Layout(props) {
   display: flex;
   justify-content: space-between;
   background-color: black;
-}
-
-.app-footer h1 {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  color: white;
-  font-size: 0.9em;
-  font-weight: 300;
-  display: inline;
-}
-
-.freebsd-logo {
-  max-height: 10px;
-  padding: 0 10px 0 0;
 }
 
 @media (min-width: 1025px) {
