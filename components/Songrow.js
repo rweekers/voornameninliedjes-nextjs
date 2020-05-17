@@ -1,10 +1,24 @@
 import Link from 'next/link';
+import Markdown from 'react-markdown';
+
+function highLightName(artist, title, name) {
+  const markDownStart = '**_';
+  const markDownEnd = '_**';
+
+  const startIndex = title.indexOf(name);
+  const endIndex = startIndex + name.length;
+  const rowTitle = `${title} - ${artist}`;
+
+  return `${rowTitle.substring(0, startIndex)}${markDownStart}${rowTitle.substring(startIndex, endIndex)}${markDownEnd}${rowTitle.substring(endIndex)}`;
+}
 
 export default function Songrow(props) {
+  const fullSongTitle = highLightName(props.song.artist, props.song.title, props.song.name);
+
   return (
     <div className="song-row">
       <Link href="/song/[id]" as={`/song/${props.song.id}`}>
-        <a><p>{props.song.title} - {props.song.artist}</p></a>
+        <a><Markdown source={fullSongTitle} /></a>
       </Link>
       <style jsx>{`
 .song-row {
@@ -17,6 +31,10 @@ export default function Songrow(props) {
   text-decoration: none;
 }
 
+.song-row .song-name {
+  color: red;
+}
+
 .song-row a:hover {
   color: orange;  
 }
@@ -25,8 +43,12 @@ export default function Songrow(props) {
   padding-bottom: 0.25em;
 }
 
-.song-row p {
+.song-row a {
   font-weight: 75;
+}
+
+.song-row em {
+  color: red;
 }
         `}
       </style>

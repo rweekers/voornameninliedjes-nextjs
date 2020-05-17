@@ -1,10 +1,14 @@
 export default function Header() {
   return (
-      <header className="app-header">
-        <a href='/'><img src="../record_gold.png" className="app-logo" alt="logo" /></a>
-        <h1>Voornamen <span>in liedjes</span></h1>
-        <p></p>
-        <style jsx>{`
+    <header className="app-header">
+      <a href='/'>
+        <div className="app-logo-container">
+          <img src="../record_gold.png" className="app-logo" alt="logo" />
+        </div>
+      </a>
+      <h1>Voornamen <span>in liedjes</span></h1>
+      <p></p>
+      <style jsx>{`
 .app-header h1 {
   color: #D4AF37;
   font-family: Andale Mono, monospace;
@@ -33,6 +37,10 @@ export default function Header() {
   }
 }
 
+.app-logo-container {
+  padding-left: 10%;
+}
+
 .app-logo {
   max-height: 60px;
   padding: 0 0 0 0%;
@@ -46,6 +54,6 @@ export default function Header() {
   }
 }
       `}</style>
-      </header>
+    </header>
   )
 }

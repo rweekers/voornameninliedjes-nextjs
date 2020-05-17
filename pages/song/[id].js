@@ -4,7 +4,7 @@ import fetch from 'isomorphic-unfetch';
 
 const Song = props => (
   <Layout>
-    <div className="Songdetail">
+    <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
       <content className="song-text"><Markdown source={props.song.background} /></content>
       <aside className="song-spotify">
@@ -33,7 +33,7 @@ const Song = props => (
       </aside>
     </div>
     <style jsx>{`
-.Songdetail {
+.song-detail {
   display: grid;
   background-color: black;
   background-size: 100%;
@@ -49,7 +49,7 @@ const Song = props => (
 }
 
 @media (min-width: 1025px) {
-  .Songdetail {
+  .song-detail {
     grid-template-areas:
       "song-title song-title"
       "song-spotify song-text"
@@ -117,6 +117,15 @@ const Song = props => (
   margin-right: auto;
   left: 0;
   right: 0;
+}
+
+.song-photos .attribution a {
+  color: white;
+  text-decoration: none;
+}
+
+.song-photos .attribution a:hover {
+  color: orange;  
 }
 
 .song-photos img {
