@@ -4,8 +4,7 @@ module.exports = {
     exportTrailingSlash: true,
     exportPathMap: async function() {
       const paths = {
-        '/': { page: '/' },
-        '/about': { page: '/about' }
+        '/': { page: '/' }
       };
       const res = await fetch('https://api.voornameninliedjes.nl/songs');
       const songs = await res.json();
