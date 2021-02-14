@@ -1,7 +1,7 @@
 const fetch = require('isomorphic-unfetch');
 
 module.exports = {
-    exportTrailingSlash: true,
+    trailingSlash: true,
     exportPathMap: async function() {
       const paths = {
         '/': { page: '/' }
