@@ -18,7 +18,7 @@ export default function Songrow(props) {
   return (
     <div className="song-row">
       <Link href="/song/[id]" as={`/song/${props.song.id}`}>
-        <a><Markdown source={fullSongTitle} /></a>
+        <a><Markdown children={fullSongTitle} /></a>
       </Link>
       <style jsx>{`
 .song-row {

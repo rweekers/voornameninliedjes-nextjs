@@ -6,7 +6,7 @@ const Song = props => (
   <Layout>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
-      <content className="song-text"><Markdown source={props.song.background} /></content>
+      <content className="song-text"><Markdown children={props.song.background} /></content>
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       </aside>
