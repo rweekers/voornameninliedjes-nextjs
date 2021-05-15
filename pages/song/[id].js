@@ -99,6 +99,7 @@ const Song = props => (
   font-weight: 100;
   margin: 0 10 0 10;
   padding: 15%;
+  word-break: break-all;
 }
 
 .song-photos {
