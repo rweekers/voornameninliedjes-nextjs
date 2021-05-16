@@ -50,7 +50,7 @@ export default function Layout(props) {
   display: flex;
   justify-content: space-between;
   background-color: black;
-  background-image: url('/header.jpeg');
+  background-image: url('/header.webp');
   background-size: cover;
   height: 100%;
 }
@@ -69,14 +69,14 @@ export default function Layout(props) {
 
 .app-side-left {
   grid-area: sidebar-one;
-  background-image: url('/left.jpeg');
+  background-image: url('/left.webp');
   background-position: top left;
   background-size: 500px;
 }
 
 .app-side-right {
   grid-area: sidebar-two;
-  background-image: url('/right.jpeg');
+  background-image: url('/right.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 500px;
