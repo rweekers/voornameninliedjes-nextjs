@@ -17,7 +17,7 @@ export default function Songrow(props) {
 
   return (
     <div className="song-row">
-      <Link href="/[artist]/[title]" as={`/${encodeURIComponent(props.song.artist)}/${encodeURIComponent(props.song.title)}`}>
+      <Link href="/[artist]/[title]" as={`/${encodeURIComponent(props.song.artist.toLowerCase())}/${encodeURIComponent(props.song.title.toLowerCase())}`}>
         <a><Markdown children={fullSongTitle} /></a>
       </Link>
       <style jsx>{`

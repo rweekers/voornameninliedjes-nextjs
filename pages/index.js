@@ -6,7 +6,7 @@ import fetch from 'isomorphic-unfetch';
 const Index = props => (
   <Layout>
     <div>
-      <content className="app-section">
+      <slot className="app-section">
         <div className="song-list">
           <ul>
             {props.songs.map(song =>
@@ -18,7 +18,7 @@ const Index = props => (
         </div>
 
 
-      </content>
+      </slot>
     </div>
 
     <style jsx>{`

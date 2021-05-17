@@ -18,7 +18,7 @@ export default function Header() {
 }
 
 .app-header h1 span::before {
-  content: "\A";
+  slot: "\A";
   white-space: pre;
 }
 

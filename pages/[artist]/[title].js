@@ -6,7 +6,7 @@ const Song = props => (
   <Layout>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
-      <content className="song-text"><Markdown children={props.song.background} /></content>
+      <div className="song-text"><Markdown children={props.song.background} /></div>
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       </aside>
@@ -185,7 +185,9 @@ export async function getServerSideProps(context) {
   }
 
   console.log(`Gotten param artist ${context.query.artist} and title ${context.query.title}`);
-  const res = await fetch(`${API}${context.query.artist}/${context.query.title}`);
+  const artist = context.query.artist.indexOf('?') >= 0 ? encodeURIComponent(context.query.artist) : context.query.artist;
+  const title = context.query.title.indexOf('?') >= 0 ? encodeURIComponent(context.query.title) : context.query.title;
+  const res = await fetch(`${API}${artist}/${title}`);
   const song = await res.json();
 
   if (song.wikimediaPhotos.length > 0) {
