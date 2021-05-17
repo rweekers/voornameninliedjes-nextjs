@@ -1,4 +1,4 @@
-import Layout from '../../components/MyLayout';
+import Layout from '../../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 
@@ -184,8 +184,8 @@ export async function getServerSideProps(context) {
     "licenseUrl": ''
   }
 
-  console.log(`Gotten param id ${context.query.id}`);
-  const res = await fetch(`${API}${context.query.id}`);
+  console.log(`Gotten param artist ${context.query.artist} and title ${context.query.title}`);
+  const res = await fetch(`${API}${context.query.artist}/${context.query.title}`);
   const song = await res.json();
 
   if (song.wikimediaPhotos.length > 0) {
