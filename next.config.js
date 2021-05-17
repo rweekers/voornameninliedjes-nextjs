@@ -10,7 +10,7 @@ module.exports = {
     const songs = await res.json();
 
     songs.forEach(song => {
-        paths[`/song/${encodeURIComponent(song.artist)}/${encodeURIComponent(song.title)}`] = { page: '/song/[artist]/[title]', query: { artist: encodeURIComponent(song.artist), title: encodeURIComponent(song.title) } };
+        paths[`/${encodeURIComponent(song.artist)}/${encodeURIComponent(song.title)}`] = { page: '/[artist]/[title]', query: { artist: encodeURIComponent(song.artist), title: encodeURIComponent(song.title) } };
       });
 
     return paths;

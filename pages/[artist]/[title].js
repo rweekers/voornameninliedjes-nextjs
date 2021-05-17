@@ -1,4 +1,4 @@
-import Layout from '../../../components/MyLayout';
+import Layout from '../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 
@@ -160,7 +160,7 @@ const Song = props => (
 //   const paths = songs.map(song => ({
 //     params: { id: song.id },
 //   }));
-//   // const paths = songs.map(song => `/song/${song.id}`)
+//   // const paths = songs.map(song => `/${song.id}`)
 
 //   // We'll pre-render only these paths at build time.
 //   // { fallback: false } means other routes should 404.
