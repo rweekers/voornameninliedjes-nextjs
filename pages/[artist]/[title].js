@@ -1,9 +1,15 @@
+import Head from 'next/head';
 import Layout from '../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 
 const Song = props => (
   <Layout>
+    <Head>
+      <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <meta name="description" content={`Informatie over het lied / nummer ${props.song.title} van ${props.song.artist}`}></meta>
+    </Head>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
       <div className="song-text"><Markdown children={props.song.background} /></div>

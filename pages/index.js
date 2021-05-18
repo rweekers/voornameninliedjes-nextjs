@@ -1,11 +1,16 @@
 import Layout from '../components/MyLayout'
 import Songrow from '../components/Songrow'
-import Link from 'next/link';
+import Head from 'next/head';
 import fetch from 'isomorphic-unfetch';
 
 const Index = props => (
   <Layout>
     <div>
+      <Head>
+        <title>Voornamen in liedjes</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content="Website met informatie over liedjes (nummers) die een voornaam in de titel hebben."></meta>
+      </Head>
       <slot className="app-section">
         <div className="song-list">
           <ul>
