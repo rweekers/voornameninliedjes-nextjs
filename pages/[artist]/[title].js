@@ -9,6 +9,7 @@ const Song = props => (
       <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <meta name="description" content={`Informatie over het lied / nummer ${props.song.title} van ${props.song.artist}`}></meta>
+      <script async defer data-domain="voornameninliedjes.nl" src="https://plausible.io/js/plausible.js"></script>
     </Head>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
