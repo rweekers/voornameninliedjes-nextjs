@@ -29,14 +29,14 @@ const Song = props => (
             <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
           </div>
         ) : (
-            <div>
-              <img
-                src={props.photo.url}
-                alt={props.photo.title}
-              />
-              <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
-            </div>
-          )}
+          <div>
+            <img
+              src={props.photo.url}
+              alt={props.photo.title}
+            />
+            <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
+          </div>
+        )}
       </aside>
     </div>
     <style jsx>{`
@@ -165,9 +165,11 @@ const Song = props => (
 
 //   // Get the paths we want to pre-render based on songs
 //   const paths = songs.map(song => ({
-//     params: { id: song.id },
+//     params: {
+//       artist: song.artist.toLowerCase(),
+//       title: song.title.toLowerCase()
+//     },
 //   }));
-//   // const paths = songs.map(song => `/${song.id}`)
 
 //   // We'll pre-render only these paths at build time.
 //   // { fallback: false } means other routes should 404.
@@ -237,8 +239,10 @@ export async function getServerSideProps(context) {
 //     "licenseUrl": ''
 //   }
 
-//   console.log(`Gotten param id ${params.id}`);
-//   const res = await fetch(`${API}${params.id}`);
+//   console.log(`Gotten param artist ${params.artist} and title ${params.title}`);
+//   const artist = params.artist.indexOf('?') >= 0 ? encodeURIComponent(params.artist) : params.artist;
+//   const title = params.title.indexOf('?') >= 0 ? encodeURIComponent(params.title) : params.title;
+//   const res = await fetch(`${API}${artist}/${title}`);
 //   const song = await res.json();
 
 //   if (song.wikimediaPhotos.length > 0) {
