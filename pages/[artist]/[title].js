@@ -159,7 +159,7 @@ const Song = props => (
 );
 
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
+  // Call an external API endpoint to get songs
   const res = await fetch('https://api.voornameninliedjes.nl/songs');
   const songs = await res.json();
 
@@ -238,10 +238,9 @@ export async function getStaticProps({ params }) {
     "licenseName": '',
     "licenseUrl": ''
   }
-
-  console.log(`Gotten param artist ${params.artist} and title ${params.title}`);
-  const artist = params.artist.indexOf('?') >= 0 ? encodeURIComponent(params.artist) : params.artist;
-  const title = params.title.indexOf('?') >= 0 ? encodeURIComponent(params.title) : params.title;
+  
+  const artist = encodeURIComponent(params.artist);
+  const title = encodeURIComponent(params.title);
   const res = await fetch(`${API}${artist}/${title}`);
   const song = await res.json();
 
