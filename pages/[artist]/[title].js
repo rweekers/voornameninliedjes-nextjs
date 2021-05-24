@@ -166,7 +166,7 @@ const Song = props => (
 //   // Get the paths we want to pre-render based on songs
 //   const paths = songs.map(song => ({
 //     params: {
-//       artist: song.artist.toLowerCase(),
+//       artist: song.artist.toLowerCase().replace('?', ''),
 //       title: song.title.toLowerCase()
 //     },
 //   }));
@@ -193,7 +193,6 @@ export async function getServerSideProps(context) {
     "licenseUrl": ''
   }
 
-  console.log(`Gotten param artist ${context.query.artist} and title ${context.query.title}`);
   const artist = encodeURIComponent(decodeURIComponent(context.query.artist));
   const title = encodeURIComponent(decodeURIComponent(context.query.title));
   const res = await fetch(`${API}${artist}/${title}`);
@@ -238,7 +237,7 @@ export async function getServerSideProps(context) {
 //     "licenseName": '',
 //     "licenseUrl": ''
 //   }
-  
+
 //   const artist = encodeURIComponent(decodeURIComponent(params.artist));
 //   const title = encodeURIComponent(decodeURIComponent(params.title));
 //   const res = await fetch(`${API}${artist}/${title}`);
@@ -262,7 +261,7 @@ export async function getServerSideProps(context) {
 //     };
 //   }
 
-//   console.log(`Fetched song: ${song.title}`);
+//   console.log(`Fetched song: ${song.artist} - ${song.title}`);
 
 //   return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
 // };
