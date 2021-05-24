@@ -13,7 +13,7 @@ module.exports = {
     const songs = await res.json();
 
     songs.forEach(song => {
-      paths[`/${encodeURIComponent(song.artist.toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`] = { page: '/[artist]/[title]', query: { artist: encodeURIComponent(song.artist.toLowerCase()), title: encodeURIComponent(song.title.toLowerCase()) } };
+      paths[`/${encodeURIComponent(decodeURIComponent(song.artist.toLowerCase()))}/${encodeURIComponent(decodeURIComponent(song.title.toLowerCase()))}`] = { page: '/[artist]/[title]', query: { artist: encodeURIComponent(decodeURIComponent(song.artist.toLowerCase())), title: encodeURIComponent(decodeURIComponent(song.title.toLowerCase())) } };
     });
 
     return paths;

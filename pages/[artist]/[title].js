@@ -194,8 +194,8 @@ export async function getServerSideProps(context) {
   }
 
   console.log(`Gotten param artist ${context.query.artist} and title ${context.query.title}`);
-  const artist = context.query.artist.indexOf('?') >= 0 ? encodeURIComponent(context.query.artist) : context.query.artist;
-  const title = context.query.title.indexOf('?') >= 0 ? encodeURIComponent(context.query.title) : context.query.title;
+  const artist = encodeURIComponent(decodeURIComponent(context.query.artist));
+  const title = encodeURIComponent(decodeURIComponent(context.query.title));
   const res = await fetch(`${API}${artist}/${title}`);
   const song = await res.json();
 
@@ -239,8 +239,8 @@ export async function getServerSideProps(context) {
 //     "licenseUrl": ''
 //   }
   
-//   const artist = encodeURIComponent(params.artist);
-//   const title = encodeURIComponent(params.title);
+//   const artist = encodeURIComponent(decodeURIComponent(params.artist));
+//   const title = encodeURIComponent(decodeURIComponent(params.title));
 //   const res = await fetch(`${API}${artist}/${title}`);
 //   const song = await res.json();
 
