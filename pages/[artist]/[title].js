@@ -158,70 +158,25 @@ const Song = props => (
   </Layout>
 );
 
-// export async function getStaticPaths() {
-//   // Call an external API endpoint to get songs
-//   const res = await fetch('https://api.voornameninliedjes.nl/songs');
-//   const songs = await res.json();
+export async function getStaticPaths() {
+  // Call an external API endpoint to get songs
+  const res = await fetch('https://api.voornameninliedjes.nl/songs');
+  const songs = await res.json();
 
-//   // Get the paths we want to pre-render based on songs
-//   const paths = songs.map(song => ({
-//     params: {
-//       artist: song.artist.toLowerCase().replace('?', ''),
-//       title: song.title.toLowerCase()
-//     },
-//   }));
+  // Get the paths we want to pre-render based on songs
+  const paths = songs.map(song => ({
+    params: {
+      artist: song.artist.toLowerCase().replace('?', ''),
+      title: song.title.toLowerCase()
+    },
+  }));
 
-//   // We'll pre-render only these paths at build time.
-//   // { fallback: false } means other routes should 404.
-//   return { paths, fallback: false }
-// }
-
-export async function getServerSideProps(context) {
-  const API = 'https://api.voornameninliedjes.nl/songs/';
-
-  let hasWikiPhoto = false;
-  let wikiPhotoUrl = '';
-  let wikiPhotoAttribution = '';
-
-  let photo = '';
-  let contribution = {
-    "ownerName": '',
-    "ownerUrl": '',
-    "photoTitle": '',
-    "photoUrl": '',
-    "licenseName": '',
-    "licenseUrl": ''
-  }
-
-  const artist = encodeURIComponent(decodeURIComponent(context.query.artist));
-  const title = encodeURIComponent(decodeURIComponent(context.query.title));
-  const res = await fetch(`${API}${artist}/${title}`);
-  const song = await res.json();
-
-  if (song.wikimediaPhotos.length > 0) {
-    const wikiPhoto = song.wikimediaPhotos[0];
-    hasWikiPhoto = true;
-    wikiPhotoUrl = wikiPhoto.url;
-    wikiPhotoAttribution = wikiPhoto.attribution;
-  } else {
-    const flickrPhoto = song.flickrPhotos[0];
-    photo = flickrPhoto;
-    contribution = {
-      'ownerName': flickrPhoto.owner.username,
-      'ownerUrl': flickrPhoto.owner.photoUrl,
-      'photoTitle': flickrPhoto.title,
-      'photoUrl': flickrPhoto.url,
-      'licenseName': flickrPhoto.license.name,
-      'licenseUrl': flickrPhoto.license.url
-    };
-  }
-
-  console.log(`Fetched song: ${song.title}`);
-
-  return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+  // We'll pre-render only these paths at build time.
+  // { fallback: false } means other routes should 404.
+  return { paths, fallback: false }
 }
 
-// export async function getStaticProps({ params }) {
+// export async function getServerSideProps(context) {
 //   const API = 'https://api.voornameninliedjes.nl/songs/';
 
 //   let hasWikiPhoto = false;
@@ -238,8 +193,8 @@ export async function getServerSideProps(context) {
 //     "licenseUrl": ''
 //   }
 
-//   const artist = encodeURIComponent(decodeURIComponent(params.artist));
-//   const title = encodeURIComponent(decodeURIComponent(params.title));
+//   const artist = encodeURIComponent(decodeURIComponent(context.query.artist));
+//   const title = encodeURIComponent(decodeURIComponent(context.query.title));
 //   const res = await fetch(`${API}${artist}/${title}`);
 //   const song = await res.json();
 
@@ -261,9 +216,54 @@ export async function getServerSideProps(context) {
 //     };
 //   }
 
-//   console.log(`Fetched song: ${song.artist} - ${song.title}`);
+//   console.log(`Fetched song: ${song.title}`);
 
 //   return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
-// };
+// }
+
+export async function getStaticProps({ params }) {
+  const API = 'https://api.voornameninliedjes.nl/songs/';
+
+  let hasWikiPhoto = false;
+  let wikiPhotoUrl = '';
+  let wikiPhotoAttribution = '';
+
+  let photo = '';
+  let contribution = {
+    "ownerName": '',
+    "ownerUrl": '',
+    "photoTitle": '',
+    "photoUrl": '',
+    "licenseName": '',
+    "licenseUrl": ''
+  }
+
+  const artist = encodeURIComponent(decodeURIComponent(params.artist));
+  const title = encodeURIComponent(decodeURIComponent(params.title));
+  const res = await fetch(`${API}${artist}/${title}`);
+  const song = await res.json();
+
+  if (song.wikimediaPhotos.length > 0) {
+    const wikiPhoto = song.wikimediaPhotos[0];
+    hasWikiPhoto = true;
+    wikiPhotoUrl = wikiPhoto.url;
+    wikiPhotoAttribution = wikiPhoto.attribution;
+  } else {
+    const flickrPhoto = song.flickrPhotos[0];
+    photo = flickrPhoto;
+    contribution = {
+      'ownerName': flickrPhoto.owner.username,
+      'ownerUrl': flickrPhoto.owner.photoUrl,
+      'photoTitle': flickrPhoto.title,
+      'photoUrl': flickrPhoto.url,
+      'licenseName': flickrPhoto.license.name,
+      'licenseUrl': flickrPhoto.license.url
+    };
+  }
+
+  console.log(`Fetched song: ${song.artist} - ${song.title}`);
+
+  return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+};
 
 export default Song;
