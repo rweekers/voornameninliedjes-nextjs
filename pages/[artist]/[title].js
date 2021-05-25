@@ -13,7 +13,7 @@ const Song = props => (
     </Head>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
-      <div className="song-text"><Markdown children={props.song.background} /></div>
+      <div className="song-text"><Markdown children={props.background} /></div>
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       </aside>
@@ -216,9 +216,12 @@ export async function getStaticPaths() {
 //     };
 //   }
 
+//   const sources = song.sources.map(s => `*[${s.name}](${s.url})*\n`);
+//   const background = song.background.indexOf('nl.wikipedia.org') < 0 && song.sources.length >= 1 ? `${song.background}\n\n${sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : song.background;
+
 //   console.log(`Fetched song: ${song.title}`);
 
-//   return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+//   return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
 // }
 
 export async function getStaticProps({ params }) {
@@ -261,9 +264,12 @@ export async function getStaticProps({ params }) {
     };
   }
 
+  const sources = song.sources.map(s => `*[${s.name}](${s.url})*\n`);
+  const background = song.background.indexOf('nl.wikipedia.org') < 0 && song.sources.length >= 1 ? `${song.background}\n\n${sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : song.background;
+
   console.log(`Fetched song: ${song.artist} - ${song.title}`);
 
-  return { props: { song, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+  return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
 };
 
 export default Song;
