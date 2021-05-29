@@ -216,8 +216,8 @@ export async function getStaticPaths() {
 //     };
 //   }
 
-//   const sources = song.sources.map(s => `*[${s.name}](${s.url})*\n`);
-//   const sourcesAppend = sources && sources.length > 0 ? `\n\n${sources > 1 ? '*Bronnen*' : '*Bron*'} : ${sources}` : '';
+//   const sources = song.sources.map(s => `*[${s.name}](${s.url})*`).join('\n\n');
+//   const sourcesAppend = sources && sources.length > 0 ? `\n\n${song.sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : '';
 //   const background = song.wikipediaPage ? `${song.background}\n[https://nl.wikipedia.org/wiki/${song.wikipediaPage}](https://nl.wikipedia.org/wiki/${encodeURI(song.wikipediaPage)})` : `${song.background}${sourcesAppend}`;
 
 //   console.log(`Fetched song: ${song.title}`);
@@ -265,8 +265,8 @@ export async function getStaticProps({ params }) {
     };
   }
 
-const sources = song.sources.map(s => `*[${s.name}](${s.url})*\n`);
-const sourcesAppend = sources && sources.length > 0 ? `\n\n${sources > 1 ? '*Bronnen*' : '*Bron*'} : ${sources}` : '';
+const sources = song.sources.map(s => `*[${s.name}](${s.url})*`).join('\n\n');
+const sourcesAppend = sources && sources.length > 0 ? `\n\n${song.sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : '';
 const background = song.wikipediaPage ? `${song.background}\n[https://nl.wikipedia.org/wiki/${song.wikipediaPage}](https://nl.wikipedia.org/wiki/${encodeURI(song.wikipediaPage)})` : `${song.background}${sourcesAppend}`;
 
   console.log(`Fetched song: ${song.artist} - ${song.title}`);
