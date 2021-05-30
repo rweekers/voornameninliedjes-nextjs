@@ -166,7 +166,7 @@ export async function getStaticPaths() {
   // Get the paths we want to pre-render based on songs
   const paths = songs.map(song => ({
     params: {
-      artist: song.artist.toLowerCase().replace('?', ''),
+      artist: song.artist.toLowerCase().replace('?', '').replace('/', ''),
       title: song.title.toLowerCase()
     },
   }));
