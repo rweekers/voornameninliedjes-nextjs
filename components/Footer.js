@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="app-footer">
       <p></p>
-      <div><h1>&copy; {new Date().getFullYear()} OrangeFlamingo </h1><a id="footerText" href="http://foo.bar">e-mail</a></div><a href="https://freebsd.org" target="blank"><img src="/freebsd-logo.webp" height="10px" className="freebsd-logo" alt="logo-freebsd" /></a>
+      <div><h1>&copy; {new Date().getFullYear()} OrangeFlamingo </h1><a id="footerText" href="http://foo.bar">e-mail</a></div><a href="https://debian.org" target="blank"><img src="/debian-logo.webp" height="10px" className="debian-logo" alt="logo-debian" /></a>
       <style jsx>{`
 .app-footer {
   height: 20px;
@@ -16,7 +16,7 @@ export default function Footer() {
   display: inline;
 }
 
-.freebsd-logo {
+.debian-logo {
   max-height: 10px;
   padding: 0 10px 0 0;
 }
