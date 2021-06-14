@@ -10,7 +10,7 @@ const Index = props => (
         <title>Voornamen in liedjes</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content="Website met informatie over liedjes (nummers) die een voornaam in de titel hebben."></meta>
-        <script async defer data-domain="voornameninliedjes.nl" src="https://plausible.io/js/plausible.js"></script>
+        <script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></script>
       </Head>
       <slot className="app-section">
         <div className="song-list">
