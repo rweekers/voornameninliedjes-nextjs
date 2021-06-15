@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { DateTime } = require('luxon');
 
 const prettier = require('prettier');
 const EXTERNAL_DATA_URL = 'https://api.voornameninliedjes.nl/songs';
@@ -9,7 +10,8 @@ const createSitemap = (songs) =>
         .map(({ artist, title }) => {
             return `
                     <url>
-                        <loc>${`${EXTERNAL_BASE_URL}/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`}</loc>
+                        <loc>${`${EXTERNAL_BASE_URL}/${encodeURIComponent(artist.replace('?', '').replace('/', '')).toLowerCase()}/${encodeURIComponent(title).toLowerCase()}`}</loc>
+                        <lastmod>${DateTime.now().setZone("Europe/Amsterdam").toFormat("yyyy-mm-dd'T'HH:mm:ssZZ")}</lastmod>
                     </url>
                 `;
         })
