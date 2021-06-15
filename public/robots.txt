@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://www.voornameninliedjes.nl/sitemap.xml
