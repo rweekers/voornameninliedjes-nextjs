@@ -11,7 +11,7 @@ const createSitemap = (songs) =>
             return `
                     <url>
                         <loc>${`${EXTERNAL_BASE_URL}/${encodeURIComponent(artist.replace('?', '').replace('/', '')).toLowerCase()}/${encodeURIComponent(title).toLowerCase()}`}</loc>
-                        <lastmod>${DateTime.now().setZone("Europe/Amsterdam").toFormat("yyyy-mm-dd'T'HH:mm:ssZZ")}</lastmod>
+                        <lastmod>${DateTime.now().setZone("Europe/Amsterdam").toISO()}</lastmod>
                     </url>
                 `;
         })
