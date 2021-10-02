@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import Markdown from 'react-markdown';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 function highLightName(artist, title, name) {
   const markDownStart = '**';
@@ -18,12 +21,18 @@ export default function Songrow(props) {
   return (
     <div className="song-row">
       <Link href="/[artist]/[title]" as={`/${encodeURIComponent(props.song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(props.song.title.toLowerCase())}`}>
-        <a><Markdown children={fullSongTitle} /></a>
+        <Card>
+          <CardContent>
+            <Typography gutterBottom>
+              <Markdown>{fullSongTitle}</Markdown>
+            </Typography>
+          </CardContent>
+        </Card>
       </Link>
       <style jsx>{`
 .song-row {
   font-size: 1.0em;
-  font-weight: 150;
+  font-weight: 100;
 }
 
 .song-row a {
@@ -45,7 +54,7 @@ export default function Songrow(props) {
 }
 
 .song-row a {
-  font-weight: 75;
+  font-weight: 100;
 }
 
 .song-row em {

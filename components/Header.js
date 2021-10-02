@@ -1,11 +1,16 @@
+import Image from 'next/image'
+import Link from 'next/link'
+
 export default function Header() {
   return (
     <header className="app-header">
-      <a href='/'>
+      <Link href='/' passHref>
         <div className="app-logo-container">
-          <img src="/record_gold.webp" className="app-logo" alt="logo" />
+          <div className="app-logo">
+            <img src="/record_gold.webp" width={60} height={60} className="app-logo" alt="logo" />
+          </div>
         </div>
-      </a>
+      </Link>
       <h1>Voornamen <span>in liedjes</span></h1>
       <p></p>
       <style jsx>{`
@@ -13,7 +18,7 @@ export default function Header() {
   color: #D4AF37;
   font-family: Andale Mono, monospace;
   font-size: 5.5em;
-  font-weight: 350;
+  font-weight: 300;
   padding: 0% 3% 0% 3%;
 }
 
@@ -38,12 +43,12 @@ export default function Header() {
 }
 
 .app-logo-container {
-  padding-left: 10%;
+  padding-left: 0.5%;
 }
 
 .app-logo {
   max-height: 60px;
-  padding: 0 0 0 0%;
+  padding: 0 0 0 00%;
 }
 
 .app-logo {
