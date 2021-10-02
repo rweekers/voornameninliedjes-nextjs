@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Layout from '../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
+import Image from 'next/image';
 
 const Song = props => (
   <Layout>
@@ -13,7 +14,7 @@ const Song = props => (
     </Head>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
-      <div className="song-text"><Markdown children={props.background} /></div>
+      <div className="song-text"><Markdown >{props.background}</Markdown></div>
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       </aside>
@@ -23,14 +24,14 @@ const Song = props => (
       <aside className="song-photos">
         {props.hasWikiPhoto ? (
           <div>
-            <img
+            <Image width="100%" height="100%" layout="responsive" objectFit="contain"
               src={props.wikiPhotoUrl} alt={props.song.artist}
             />
             <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
           </div>
         ) : (
           <div>
-            <img
+            <Image width="100%" height="100%" layout="responsive" objectFit="contain"
               src={props.photo.url}
               alt={props.photo.title}
             />
@@ -89,7 +90,7 @@ const Song = props => (
 .song-title h1 {
   color: darkgray;
   font-size: 2em;
-  font-weight: 200;
+  font-weight: 100;
 }
 
 .song-title h2 {
