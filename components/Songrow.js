@@ -20,7 +20,7 @@ export default function Songrow(props) {
 
   return (
     <div className="song-row">
-      <Link href="/[artist]/[title]" as={`/${encodeURIComponent(props.song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(props.song.title.toLowerCase())}`}>
+      <Link href="/[artist]/[title]" as={`/${encodeURIComponent(props.song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(props.song.title.toLowerCase())}`} passHref>
         <Card>
           <CardContent>
             <Typography gutterBottom>
