@@ -26,7 +26,7 @@ const Index = props => (
           <ImageList variant="masonry" cols={5} sx={{ display: { xs: 'none', sm: 'none', md: 'none', md: 'none', xl: 'block'} }} gap={6}>
           {props.songs.map((song) => (
                 <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`}>
+                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
                     <ImageListItem key={song.id}>
                       <img
                         src={`${song.artistImage}?w=162&auto=format`}
@@ -54,7 +54,7 @@ const Index = props => (
           <ImageList variant="masonry" cols={4} sx={{ display: { xs: 'none', sm: 'none', md: 'none', md: 'block', xl: 'none'} }} gap={6}>
             {props.songs.map((song) => (
                 <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`}>
+                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
                     <ImageListItem key={song.id}>
                       <img
                         src={`${song.artistImage}?w=162&auto=format`}
@@ -82,7 +82,7 @@ const Index = props => (
           <ImageList variant="masonry" cols={3} sx={{ display: { xs: 'none', sm: 'none', md: 'block', md: 'none', xl: 'none'} }} gap={6}>
             {props.songs.map((song) => (
                 <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`}>
+                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
                     <ImageListItem key={song.id}>
                       <img
                         src={`${song.artistImage}?w=162&auto=format`}
@@ -110,7 +110,7 @@ const Index = props => (
           <ImageList variant="masonry" cols={2} sx={{ display: { xs: 'none', sm: 'block', md: 'none', md: 'none', xl: 'none'} }} gap={6}>
             {props.songs.map((song) => (
                 <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`}>
+                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
                     <ImageListItem key={song.id}>
                       <img
                         src={`${song.artistImage}?w=162&auto=format`}
@@ -138,7 +138,7 @@ const Index = props => (
           <ImageList cols={1} sx={{ display: { xs: 'block', sm: 'none', md: 'none', md: 'none', xl: 'none'} }} gap={6}>
             {props.songs.map((song) => (
                 <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`}>
+                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
                     <ImageListItem key={song.id}>
                       <img
                         src={`${song.artistImage}?w=162&auto=format`}
