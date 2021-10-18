@@ -22,6 +22,13 @@ export default function Header() {
   padding: 0% 3% 0% 3%;
 }
 
+@media (max-width: 350px) {
+  .app-header h1 {
+      font-size: 4em;
+  }
+}
+
+
 .app-header h1 span::before {
   slot: "\A";
   white-space: pre;

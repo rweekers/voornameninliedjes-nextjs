@@ -6,8 +6,6 @@ const farmIds = range(1, 20, 1);
 module.exports = {
   trailingSlash: true,
   images: {
-    path: '',
-    loader: 'imgix',
     domains: ['upload.wikimedia.org'].concat(farmIds.map(farmId => `farm${farmId}.staticflickr.com`)),
   },
   exportPathMap: async function () {
