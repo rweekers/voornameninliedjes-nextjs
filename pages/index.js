@@ -1,16 +1,9 @@
 import Layout from '../components/MyLayout';
 import Head from 'next/head';
 import fetch from 'isomorphic-unfetch';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import Link from 'next/link';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
+import MyImageList from '../components/MyImageList';
 
 const Index = props => (
-
-  
 
   <Layout>
     <div>
@@ -22,147 +15,11 @@ const Index = props => (
       </Head>
       <slot className="app-section">
         <div className="masonry">
-          {/* TODO create separate component for the ImageList, find a better way to be responsive in number of columns */}
-          <ImageList variant="masonry" cols={5} sx={{ display: { xs: 'none', sm: 'none', md: 'none', md: 'none', xl: 'block'} }} gap={6}>
-          {props.songs.map((song) => (
-                <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
-                    <ImageListItem key={song.id}>
-                      <img
-                        src={`${song.artistImage}?w=162&auto=format`}
-                        srcSet={`${song.artistImage}?w=162&auto=format&dpr=2 2x`}
-                        alt={song.title}
-                        loading="lazy"
-                      />
-                      <ImageListItemBar
-                        title={song.title}
-                        subtitle={song.artist}
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                          aria-label={`info about ${song.title}`}
-                        >
-                          {/* <InfoIcon /> */}
-                        </IconButton>
-                      }
-                      />
-                    </ImageListItem>
-                  </Link>
-                </div>
-            ))}
-          </ImageList>
-          <ImageList variant="masonry" cols={4} sx={{ display: { xs: 'none', sm: 'none', md: 'none', md: 'block', xl: 'none'} }} gap={6}>
-            {props.songs.map((song) => (
-                <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
-                    <ImageListItem key={song.id}>
-                      <img
-                        src={`${song.artistImage}?w=162&auto=format`}
-                        srcSet={`${song.artistImage}?w=162&auto=format&dpr=2 2x`}
-                        alt={song.title}
-                        loading="lazy"
-                      />
-                      <ImageListItemBar
-                        title={song.title}
-                        subtitle={song.artist}
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                          aria-label={`info about ${song.title}`}
-                        >
-                          {/* <InfoIcon /> */}
-                        </IconButton>
-                      }
-                      />
-                    </ImageListItem>
-                  </Link>
-                </div>
-            ))}
-          </ImageList>
-          <ImageList variant="masonry" cols={3} sx={{ display: { xs: 'none', sm: 'none', md: 'block', md: 'none', xl: 'none'} }} gap={6}>
-            {props.songs.map((song) => (
-                <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
-                    <ImageListItem key={song.id}>
-                      <img
-                        src={`${song.artistImage}?w=162&auto=format`}
-                        srcSet={`${song.artistImage}?w=162&auto=format&dpr=2 2x`}
-                        alt={song.title}
-                        loading="lazy"
-                      />
-                      <ImageListItemBar
-                        title={song.title}
-                        subtitle={song.artist}
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                          aria-label={`info about ${song.title}`}
-                        >
-                          {/* <InfoIcon /> */}
-                        </IconButton>
-                      }
-                      />
-                    </ImageListItem>
-                  </Link>
-                </div>
-            ))}
-          </ImageList>
-          <ImageList variant="masonry" cols={2} sx={{ display: { xs: 'none', sm: 'block', md: 'none', md: 'none', xl: 'none'} }} gap={6}>
-            {props.songs.map((song) => (
-                <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
-                    <ImageListItem key={song.id}>
-                      <img
-                        src={`${song.artistImage}?w=162&auto=format`}
-                        srcSet={`${song.artistImage}?w=162&auto=format&dpr=2 2x`}
-                        alt={song.title}
-                        loading="lazy"
-                      />
-                      <ImageListItemBar
-                        title={song.title}
-                        subtitle={song.artist}
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                          aria-label={`info about ${song.title}`}
-                        >
-                          {/* <InfoIcon /> */}
-                        </IconButton>
-                      }
-                      />
-                    </ImageListItem>
-                  </Link>
-                </div>
-            ))}
-          </ImageList>
-          <ImageList cols={1} sx={{ display: { xs: 'block', sm: 'none', md: 'none', md: 'none', xl: 'none'} }} gap={6}>
-            {props.songs.map((song) => (
-                <div className="detailSong" key={song.id}>
-                  <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
-                    <ImageListItem key={song.id}>
-                      <img
-                        src={`${song.artistImage}?w=162&auto=format`}
-                        srcSet={`${song.artistImage}?w=162&auto=format&dpr=2 2x`}
-                        alt={song.title}
-                        loading="lazy"
-                      />
-                      <ImageListItemBar
-                        title={song.title}
-                        subtitle={song.artist}
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                          aria-label={`info about ${song.title}`}
-                        >
-                          {/* <InfoIcon /> */}
-                        </IconButton>
-                      }
-                      />
-                    </ImageListItem>
-                  </Link>
-                </div>
-            ))}
-          </ImageList>
+          <MyImageList variant="masonry" songs={props.songs} cols={5} sx={{ display: { xs: 'none', sm: 'none', md: 'none', md: 'none', xl: 'block'} }} />
+          <MyImageList variant="masonry" songs={props.songs} cols={4} sx={{ display: { xs: 'none', sm: 'none', md: 'none', md: 'block', xl: 'none'} }} />
+          <MyImageList variant="masonry" songs={props.songs} cols={3} sx={{ display: { xs: 'none', sm: 'none', md: 'block', md: 'none', xl: 'none'} }} />
+          <MyImageList variant="masonry" songs={props.songs} cols={2} sx={{ display: { xs: 'none', sm: 'block', md: 'none', md: 'none', xl: 'none'} }} />
+          <MyImageList variant="standard" songs={props.songs} cols={1} sx={{ display: { xs: 'block', sm: 'none', md: 'none', md: 'none', xl: 'none'} }} />
         </div>
 
 
