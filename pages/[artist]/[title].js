@@ -88,7 +88,7 @@ const Song = props => (
 }
 
 .song-title h1 {
-  color: darkgray;
+  color: #464646;
   font-size: 2em;
   font-weight: 100;
 }

@@ -7,7 +7,7 @@ export default function Header() {
       <Link href='/' passHref>
         <div className="app-logo-container">
           <div className="app-logo">
-            <img src="/record_gold.webp" width={60} height={60} className="app-logo" alt="logo" />
+            <Image src="/record_gold.webp" width={60} height={60} className="app-logo" alt="logo" />
           </div>
         </div>
       </Link>
@@ -16,15 +16,15 @@ export default function Header() {
       <style jsx>{`
 .app-header h1 {
   color: #D4AF37;
-  font-family: Andale Mono, monospace;
-  font-size: 5.5em;
+  font-family: Noto Sans Mono, monospace;
+  font-size: 5em;
   font-weight: 300;
   padding: 0% 3% 0% 3%;
 }
 
 @media (max-width: 350px) {
   .app-header h1 {
-      font-size: 4em;
+      font-size: 3em;
   }
 }
 

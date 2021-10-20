@@ -40,10 +40,6 @@ const Index = props => (
   margin-left: 3%;
   margin-right: 3%;
 }
-
-.detailSong:hover {
-  cursor: pointer;
-}
     `}</style>
   </Layout>
 );

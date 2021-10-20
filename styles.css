@@ -8,3 +8,32 @@ html {
   font-family: Roboto, Open Sans, sans-serif;
   font-size: 62.5%; /* font-size 1em = 10px on default browser settings */ 
 }
+
+/* .MuiImageListItemBar-root {
+  height: 100%;
+}
+
+.MuiImageListItemBar-root:hover {
+  height: 30%;
+} */
+
+.MuiImageListItemBar-title {
+  font-weight: 300 !important;
+  font-size: 1.8rem !important;
+}
+
+.MuiImageListItemBar-subtitle {
+  color: lightgrey !important;
+  font-weight: 100 !important;
+  font-size: 1.6rem !important;
+}
+
+@media (max-width: 600px) {
+  .MuiImageListItemBar-title {
+    font-size: 2.4rem !important;
+  }
+  
+  .MuiImageListItemBar-subtitle {
+    font-size: 2.2rem !important;
+  }
+}

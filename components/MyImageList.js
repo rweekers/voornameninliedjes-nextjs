@@ -8,11 +8,12 @@ export default function Songrow(props) {
 
   return (
     <div className="image-list">
-      <ImageList variant={props.variant} cols={props.cols} sx={props.sx} gap={6}>
+      <ImageList variant={props.variant} cols={props.cols} sx={props.sx} gap={20}>
         {props.songs.map((song) => (
-            <div className="detailSong" key={song.id}>
+            <div className="detail-song" key={song.id}>
               <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
                 <ImageListItem key={song.id}>
+                  {/* TODO Use Image from nextjs (not working directly with ImageListItem?) */}
                   <img
                     src={`${song.artistImage}?w=162&auto=format`}
                     srcSet={`${song.artistImage}?w=162&auto=format&dpr=2 2x`}
@@ -22,14 +23,7 @@ export default function Songrow(props) {
                   <ImageListItemBar
                     title={song.title}
                     subtitle={song.artist}
-                  actionIcon={
-                    <IconButton
-                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                      aria-label={`info about ${song.title}`}
-                    >
-                      {/* <InfoIcon /> */}
-                    </IconButton>
-                  }
+                    position="bottom"
                   />
                 </ImageListItem>
               </Link>
@@ -37,8 +31,8 @@ export default function Songrow(props) {
         ))}
       </ImageList>
       <style jsx>{`
-.image-list {
-
+.detail-song {
+  cursor: pointer
 }
         `}
       </style>
