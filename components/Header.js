@@ -57,14 +57,6 @@ export default function Header() {
   max-height: 60px;
   padding: 0 0 0 00%;
 }
-
-.app-logo {
-  animation: spin 20s infinite linear;
-  @keyframes spin {
-    50% { transform: rotate(180deg); }
-    100% { transform: rotate(360deg); }
-  }
-}
       `}</style>
     </header>
   )
