@@ -3,6 +3,9 @@ import Layout from '../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 import Image from 'next/image';
+import LanguageIcon from '@mui/icons-material/Language';
+import Tooltip from '@mui/material/Tooltip';
+var TurndownService = require('turndown');
 
 const Song = props => (
   <Layout>
@@ -14,7 +17,30 @@ const Song = props => (
     </Head>
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
-      <div className="song-text"><Markdown >{props.background}</Markdown></div>
+      <div className="song-text">
+        {props.background ? (
+          <div>
+            <p className="song-background">Achtergrond</p>
+            <Markdown >{props.background}</Markdown>
+          </div>
+        ) : (props.wikiSummary ? (
+          <div>
+            <p className="song-background">Achtergrond <Tooltip title="Geen Nederlandse achtergrond"><LanguageIcon /></Tooltip></p>
+            <Markdown >{props.wikiSummary}</Markdown>
+          </div>
+        ) : (
+          <p className="song-background">Geen achtergrond gevonden...</p>
+        )
+        )}
+        {props.album ? (
+          <div className="song-lastfm">Album: {props.album}</div>
+        ) : (<p />)}
+        {props.genres ? (
+          <div className="song-tags">{props.genres.join(", ")}</div>
+        ) : (
+          <p />
+        )}
+      </div>
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       </aside>
@@ -109,6 +135,24 @@ const Song = props => (
   padding: 15%;
   word-break: normal;
   overflow-wrap: anywhere;
+}
+
+.song-lastfm {
+  font-size: 1.1em;
+  font-weight: 300;
+  margin-top: 1.2rem;
+}
+
+.song-tags {
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-top: 0.8rem;
+}
+
+.song-background {
+  font-size: 1.2em;
+  font-weight: 300;
+  margin-bottom: 1.1rem;
 }
 
 .song-photos {
@@ -266,11 +310,32 @@ export async function getStaticProps({ params }) {
     };
   }
 
-const sources = song.sources.map(s => `*[${s.name}](${s.url})*`).join('\n\n');
-const sourcesAppend = sources && sources.length > 0 ? `\n\n${song.sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : '';
-const background = song.wikipediaPage ? `${song.background}\n[https://nl.wikipedia.org/wiki/${song.wikipediaPage}](https://nl.wikipedia.org/wiki/${encodeURI(song.wikipediaPage)})` : `${song.background}${sourcesAppend}`;
+  const sources = song.sources.map(s => `*[${s.name}](${s.url})*`).join('\n\n');
+  const sourcesAppend = sources && sources.length > 0 ? `\n\n${song.sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : '';
+  const background = song.wikipediaPage ? `${song.background}\n[https://nl.wikipedia.org/wiki/${song.wikipediaPage}](https://nl.wikipedia.org/wiki/${encodeURI(song.wikipediaPage)})` : `${song.background}${sourcesAppend}`;
 
   console.log(`Fetched song: ${song.artist} - ${song.title}`);
+
+  const API_LAST_FM = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=fbfbf9c47ff8bcf4642ece8c7de2305a';
+  const resLastFM = await fetch(`${API_LAST_FM}&artist=${artist}&track=${title}&format=json`);
+  
+  if (resLastFM) {
+
+    const lastFMInfo = await resLastFM.json();
+
+    if (lastFMInfo.error) {
+      return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+    }
+
+    const album = lastFMInfo?.track?.album != null ? lastFMInfo?.track?.album?.title : null;
+    const genres = lastFMInfo?.track?.toptags?.tag.map(t => t.name)
+    const rawWikiSummary = lastFMInfo?.track?.wiki != null ? lastFMInfo.track.wiki.summary : null;
+
+    var turndownService = new TurndownService()
+    const wikiSummary = rawWikiSummary != null ? turndownService.turndown(rawWikiSummary) : null;
+
+    return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, album, genres, wikiSummary } };
+  }
 
   return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
 };
