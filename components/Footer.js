@@ -5,13 +5,13 @@ export default function Footer() {
     <footer className="app-footer">
       <p></p>
       <div>
-        <h1>&copy; {new Date().getFullYear()} OrangeFlamingo 
+        <h1>&copy; {new Date().getFullYear()} OrangeFlamingo
         </h1>
-        <a id="footerText" href="http://foo.bar">e-mail</a></div><a href="https://debian.org" target="blank">
-          <div className="debian-logo">
-            <Image src="/debian-logo.webp" width={53} height={10} alt="logo-debian" />
-          </div>
-        </a>
+        <a id="footerText" href="mailto:info@voornameninliedjes.nl"> e-mail</a></div><a href="https://debian.org" target="blank">
+        <div className="debian-logo">
+          <Image src="/debian-logo.webp" width={53} height={10} alt="logo-debian" />
+        </div>
+      </a>
       <style jsx>{`
 .app-footer {
   height: 20px;
