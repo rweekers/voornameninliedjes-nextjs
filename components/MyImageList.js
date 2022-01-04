@@ -13,7 +13,7 @@ export default function Songrow(props) {
       <ImageList variant={props.variant} cols={props.cols} sx={props.sx} gap={20}>
         {props.songs.map((song) => (
           <div className="detail-song" key={song.id}>
-            <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.toLowerCase())}`} passHref>
+            <Link href="/[artist]/[title]" className="test" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.replace('?', '').toLowerCase())}`} passHref>
               <ImageListItem key={song.id}>
                 {/* TODO Use Image from nextjs (not working directly with ImageListItem?) */}
                 <img

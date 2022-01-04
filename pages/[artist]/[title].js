@@ -212,7 +212,7 @@ export async function getStaticPaths() {
   const paths = songs.map(song => ({
     params: {
       artist: song.artist.toLowerCase().replace('?', '').replace('/', ''),
-      title: song.title.toLowerCase()
+      title: song.title.toLowerCase().replace('?', '')
     },
   }));
 
