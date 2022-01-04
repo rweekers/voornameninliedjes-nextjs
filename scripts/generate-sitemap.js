@@ -10,7 +10,7 @@ const createSitemap = (songs) =>
         .map(({ artist, title }) => {
             return `
                     <url>
-                        <loc>${`${EXTERNAL_BASE_URL}/${encodeURIComponent(artist.replace('?', '').replace('/', '')).toLowerCase()}/${encodeURIComponent(title.replace('?', '')).toLowerCase()}`}</loc>
+                        <loc>${`${EXTERNAL_BASE_URL}/${encodeURIComponent(artist.replace('?', '').replace('/', '')).toLowerCase()}/${encodeURIComponent(title.replace('?', '').replace('$', '')).toLowerCase()}`}</loc>
                         <lastmod>${DateTime.now().setZone("Europe/Amsterdam").toISO()}</lastmod>
                     </url>
                 `;
