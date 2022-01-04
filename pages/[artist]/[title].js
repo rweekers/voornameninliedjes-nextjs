@@ -44,9 +44,11 @@ const Song = props => (
       <aside className="song-spotify">
         <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       </aside>
-      <aside className="song-youtube">
-        <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
-      </aside>
+      {props.song.youtube ? (
+        <aside className="song-youtube">
+          <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
+        </aside>
+      ) : (<div />)}
       <aside className="song-photos">
         {props.hasWikiPhoto ? (
           <div>
@@ -110,7 +112,6 @@ const Song = props => (
   grid-area: song-title;
   background-color: white;
   color: black;
-  text-transform: capitalize;
 }
 
 .song-title h1 {
@@ -318,7 +319,7 @@ export async function getStaticProps({ params }) {
 
   const API_LAST_FM = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=fbfbf9c47ff8bcf4642ece8c7de2305a';
   const resLastFM = await fetch(`${API_LAST_FM}&artist=${artist}&track=${title}&format=json`);
-  
+
   if (resLastFM) {
 
     const lastFMInfo = await resLastFM.json();
