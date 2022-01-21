@@ -3,9 +3,9 @@ import Layout from '../../components/MyLayout';
 import Markdown from 'react-markdown';
 import fetch from 'isomorphic-unfetch';
 import Image from 'next/image';
+import Link from 'next/link';
 import LanguageIcon from '@mui/icons-material/Language';
 import Tooltip from '@mui/material/Tooltip';
-var TurndownService = require('turndown');
 
 const Song = props => (
   <Layout>
@@ -18,25 +18,42 @@ const Song = props => (
     <div className="song-detail">
       <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
       <div className="song-text">
-        {props.background ? (
+        {props.song.background ? (
           <div>
             <p className="song-background">Achtergrond</p>
-            <Markdown >{props.background}</Markdown>
+            <Markdown >{props.song.background}</Markdown>
           </div>
-        ) : (props.wikiSummary ? (
+        ) : props.song.wikipediaNl ? (
+          <div>
+            <p className="song-background">Achtergrond</p>
+            <Markdown >{props.song.wikipediaNl}</Markdown>
+          </div>
+        ) : props.song.wikipediaSummaryEn ? (
           <div>
             <p className="song-background">Achtergrond <Tooltip title="Geen Nederlandse achtergrond"><LanguageIcon /></Tooltip></p>
-            <Markdown >{props.wikiSummary}</Markdown>
+            <Markdown >{props.song.wikipediaSummaryEn}</Markdown>
           </div>
         ) : (
-          <p className="song-background">Geen achtergrond gevonden...</p>
-        )
+          <div>
+            <p className="song-background">Achtergrond</p>
+            <Markdown >Geen achtergrond gevonden...</Markdown>
+          </div>
         )}
-        {props.album ? (
-          <div className="song-lastfm">Album: {props.album}</div>
+        {props.sources && props.sources.length > 0 ? (
+          <div>
+            <p className="song-sources">{props.sourcesHeader}</p>
+            {props.sources.map((s) =>
+              <Link href={s.url} as={s.url} key={s.url} passHref>{s.name}</Link>
+            )}
+          </div>
         ) : (<p />)}
-        {props.genres ? (
-          <div className="song-tags">{props.genres.join(", ")}</div>
+        {props.song.albumName ? (
+          <div>
+            <div className="song-lastfm">Album: {props.song.albumName}</div>
+          </div>
+        ) : (<p />)}
+        {props.song.tags ? (
+          <div className="song-tags">{props.song.tags.map(t => t.name).join(", ")}</div>
         ) : (
           <p />
         )}
@@ -136,6 +153,12 @@ const Song = props => (
   padding: 15%;
   word-break: normal;
   overflow-wrap: anywhere;
+}
+
+.song-sources {
+  font-size: 1.1em;
+  font-weight: 300;
+  margin-top: 1.2rem;
 }
 
 .song-lastfm {
@@ -311,34 +334,12 @@ export async function getStaticProps({ params }) {
     };
   }
 
-  const sources = song.sources.map(s => `*[${s.name}](${s.url})*`).join('\n\n');
-  const sourcesAppend = sources && sources.length > 0 ? `\n\n${song.sources.length > 1 ? '*Bronnen*' : '*Bron*'}: ${sources}` : '';
-  const background = song.wikipediaPage ? `${song.background}\n[https://nl.wikipedia.org/wiki/${song.wikipediaPage}](https://nl.wikipedia.org/wiki/${encodeURI(song.wikipediaPage)})` : `${song.background}${sourcesAppend}`;
+  const background = song.background ? song.background : song.wikipediaNl ? song.wikipediaNl : song.wikipediaSummaryEn ? song.wikipediaSummaryEn : "Geen achtergrond gevonden...";
 
-  console.log(`Fetched song: ${song.artist} - ${song.title}`);
+  const sources = (!song.background && song.wikipediaNl) ? song.sources.concat({ url: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}`, name: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}` }) : song.sources;
+  const sourcesHeader = sources && sources.length > 1 ? 'Bronnen' : 'Bron';
 
-  const API_LAST_FM = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=fbfbf9c47ff8bcf4642ece8c7de2305a';
-  const resLastFM = await fetch(`${API_LAST_FM}&artist=${artist}&track=${title}&format=json`);
-
-  if (resLastFM) {
-
-    const lastFMInfo = await resLastFM.json();
-
-    if (lastFMInfo.error) {
-      return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
-    }
-
-    const album = lastFMInfo?.track?.album != null ? lastFMInfo?.track?.album?.title : null;
-    const genres = lastFMInfo?.track?.toptags?.tag.map(t => t.name)
-    const rawWikiSummary = lastFMInfo?.track?.wiki != null ? lastFMInfo.track.wiki.summary : null;
-
-    var turndownService = new TurndownService()
-    const wikiSummary = rawWikiSummary != null ? turndownService.turndown(rawWikiSummary) : null;
-
-    return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, album, genres, wikiSummary } };
-  }
-
-  return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution } };
+  return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, sources, sourcesHeader } };
 };
 
 export default Song;
