@@ -37,3 +37,23 @@ html {
     font-size: 2.2rem !important;
   }
 }
+
+.MuiChip-colorPrimary {
+  background-color: darkgoldenrod !important;
+  color: white !important;
+}
+
+.MuiChip-colorPrimary:hover {
+  background-color: darkgoldenrod !important;
+  color: white !important;
+}
+
+.MuiChip-colorSecondary {
+  background-color: lightgrey !important;
+  color: black !important;
+}
+
+.MuiChip-colorSecondary:hover {
+  background-color: darkorange !important;
+  color: white !important;
+}

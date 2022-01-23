@@ -17,9 +17,9 @@ export default function Layout(props) {
       <Header className="app-header" />
       <Aside className="app-side-left" />
       <Aside className="app-side-right" />
-      <content className="app-section">
+      <slot className="app-section">
         {props.children}
-      </content>
+      </slot>
       <Footer />
       <style global jsx>{`
 .app {
@@ -76,9 +76,9 @@ export default function Layout(props) {
 
 .app-side-right {
   grid-area: sidebar-two;
-  background-image: url('/right.webp');
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image: url('/left.webp');
+  background-position: top left;
+  transform:scaleX(-1);
   background-size: 500px;
 }
 
