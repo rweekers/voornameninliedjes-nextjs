@@ -71,6 +71,7 @@ const Song = props => (
           <div>
             <Image width="100%" height="100%" layout="responsive" objectFit="contain" priority={true} 
               src={`https://images.voornameninliedjes.nl/${props.song.localImage}`} alt={props.song.artist}
+              placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mP8P5HhHAMRgHFUIX0VAgCwHRe3uuy9GgAAAABJRU5ErkJggg=="
             />
             <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
           </div>
