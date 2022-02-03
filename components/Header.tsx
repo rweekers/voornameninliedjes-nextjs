@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Header() {
+type Props = {
+  some?: string
+}
+
+export const Header = <PROPS extends Props & React.HTMLAttributes<any>,>({ some, ...rest }: PROPS): JSX.Element => {
   return (
     <header className="app-header">
       <Link href='/' passHref>

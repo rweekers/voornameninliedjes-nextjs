@@ -1,11 +1,13 @@
-import Head from 'next/head';
-import Layout from '../../components/MyLayout';
-import Markdown from 'react-markdown';
-import fetch from 'isomorphic-unfetch';
-import Image from 'next/image';
-import Link from 'next/link';
-import LanguageIcon from '@mui/icons-material/Language';
-import Tooltip from '@mui/material/Tooltip';
+import Head from 'next/head'
+import Layout from '../../components/MyLayout'
+import Markdown from 'react-markdown'
+import fetch from 'isomorphic-unfetch'
+import Image from 'next/image'
+import Link from 'next/link'
+import LanguageIcon from '@mui/icons-material/Language'
+import Tooltip from '@mui/material/Tooltip'
+import { GetServerSideProps } from 'next'
+
 
 const Song = props => (
   <Layout>
@@ -53,13 +55,13 @@ const Song = props => (
           </div>
         ) : (<p />)}
         {props.song.tags ? (
-          <div className="song-tags">{props.song.tags.map(t => t.name).join(", ")}</div>
+          <div className="song-tags">{props.song.tags.map(t => t.name).join(', ')}</div>
         ) : (
           <p />
         )}
       </div>
       <aside className="song-spotify">
-        <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allow="encrypted-media"></iframe>
       </aside>
       {props.song.youtube ? (
         <aside className="song-youtube">
@@ -227,38 +229,38 @@ const Song = props => (
 .attribution p { word-break: break-all }
       `}</style>
   </Layout>
-);
+)
 
-export async function getServerSideProps(context) {
-  const API = 'https://api.voornameninliedjes.nl/songs/';
+export const getServerSideProps: GetServerSideProps = async context => {
+  const API = 'https://api.voornameninliedjes.nl/songs/'
 
-  let hasWikiPhoto = false;
-  let wikiPhotoUrl = '';
-  let wikiPhotoAttribution = '';
+  let hasWikiPhoto = false
+  let wikiPhotoUrl = ''
+  let wikiPhotoAttribution = ''
 
-  let photo = '';
+  let photo = ''
   let contribution = {
-    "ownerName": '',
-    "ownerUrl": '',
-    "photoTitle": '',
-    "photoUrl": '',
-    "licenseName": '',
-    "licenseUrl": ''
+    'ownerName': '',
+    'ownerUrl': '',
+    'photoTitle': '',
+    'photoUrl': '',
+    'licenseName': '',
+    'licenseUrl': ''
   }
 
-  const artist = encodeURIComponent(decodeURIComponent(context.query.artist));
-  const title = encodeURIComponent(decodeURIComponent(context.query.title));
-  const res = await fetch(`${API}${artist}/${title}`);
-  const song = await res.json();
+  const artist = context.params.artist
+  const title = context.params.title
+  const res = await fetch(`${API}${artist}/${title}`)
+  const song = await res.json()
 
   if (song.wikimediaPhotos.length > 0) {
-    const wikiPhoto = song.wikimediaPhotos[0];
-    hasWikiPhoto = true;
-    wikiPhotoUrl = wikiPhoto.url;
-    wikiPhotoAttribution = wikiPhoto.attribution;
+    const wikiPhoto = song.wikimediaPhotos[0]
+    hasWikiPhoto = true
+    wikiPhotoUrl = wikiPhoto.url
+    wikiPhotoAttribution = wikiPhoto.attribution
   } else {
-    const flickrPhoto = song.flickrPhotos[0];
-    photo = flickrPhoto;
+    const flickrPhoto = song.flickrPhotos[0]
+    photo = flickrPhoto
     contribution = {
       'ownerName': flickrPhoto.owner.username,
       'ownerUrl': flickrPhoto.owner.photoUrl,
@@ -266,15 +268,15 @@ export async function getServerSideProps(context) {
       'photoUrl': flickrPhoto.url,
       'licenseName': flickrPhoto.license.name,
       'licenseUrl': flickrPhoto.license.url
-    };
+    }
   }
 
-  const background = song.background ? song.background : song.wikipediaNl ? song.wikipediaNl : song.wikipediaSummaryEn ? song.wikipediaSummaryEn : "Geen achtergrond gevonden...";
+  const background = song.background ? song.background : song.wikipediaNl ? song.wikipediaNl : song.wikipediaSummaryEn ? song.wikipediaSummaryEn : 'Geen achtergrond gevonden...'
 
-  const sources = (!song.background && song.wikipediaNl) ? song.sources.concat({ url: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}`, name: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}` }) : song.sources;
-  const sourcesHeader = sources && sources.length > 1 ? 'Bronnen' : 'Bron';
+  const sources = (!song.background && song.wikipediaNl) ? song.sources.concat({ url: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}`, name: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}` }) : song.sources
+  const sourcesHeader = sources && sources.length > 1 ? 'Bronnen' : 'Bron'
 
-  return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, sources, sourcesHeader } };
-};
+  return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, sources, sourcesHeader } }
+}
 
-export default Song;
+export default Song

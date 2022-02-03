@@ -1,4 +1,4 @@
-import Header from './Header'
+import { Header } from './Header'
 import Aside from './Aside'
 import Footer from './Footer'
 import ScriptHeader from './ScriptHeader'
