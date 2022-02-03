@@ -1,20 +1,20 @@
-import Layout from '../components/MyLayout';
-import Head from 'next/head';
-import fetch from 'isomorphic-unfetch';
-import MyImageList from '../components/MyImageList';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import { useRouter } from 'next/router';
-import { isEqual } from 'lodash-es';
+import Layout from '../components/MyLayout'
+import Head from 'next/head'
+import fetch from 'isomorphic-unfetch'
+import MyImageList from '../components/MyImageList'
+import Chip from '@mui/material/Chip'
+import Stack from '@mui/material/Stack'
+import { useRouter } from 'next/router'
+import { isEqual } from 'lodash-es'
 
 function Index(props) {
 
-  const router = useRouter();
+  const router = useRouter()
 
   const chipColor = (t) => {
-    const a = props.currSel.split(',').sort();
-    const b = t.split('').sort();
-    return isEqual(a, b) ? "primary" : "secondary"
+    const a = props.currSel.split(',').sort()
+    const b = t.split('').sort()
+    return isEqual(a, b) ? 'primary' : 'secondary'
   }
 
   const handleClick = (e) => {
@@ -72,13 +72,13 @@ function Index(props) {
 };
 
 export async function getServerSideProps({ query }) {
-  const selectedChars = query.characters ? query.characters : 'a,b,c';
+  const selectedChars = query.characters ? query.characters : 'a,b,c'
   const charsPerPage = ['abc', 'def', 'ghi', 'jkl', 'mno', 'pqr', 'stu', 'vwxyz']
 
-  const res = await fetch(`https://api.voornameninliedjes.nl/songs?first-characters=${selectedChars}`);
-  const data = await res.json();
+  const res = await fetch(`https://api.voornameninliedjes.nl/songs?first-characters=${selectedChars}`)
+  const data = await res.json()
 
-  console.log(`Song data fetched. Count: ${data.length}`);
+  console.log(`Song data fetched. Count: ${data.length}`)
 
   return {
     props: {
@@ -86,7 +86,7 @@ export async function getServerSideProps({ query }) {
       chars: charsPerPage,
       currSel: selectedChars
     }
-  };
+  }
 }
 
-export default Index;
+export default Index
