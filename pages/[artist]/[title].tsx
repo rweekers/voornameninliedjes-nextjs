@@ -7,9 +7,29 @@ import Link from 'next/link'
 import LanguageIcon from '@mui/icons-material/Language'
 import Tooltip from '@mui/material/Tooltip'
 import { GetServerSideProps } from 'next'
+import { Song, Source, Tag, FlickrPhoto } from '../../types/song'
+import { PropsWithChildren } from 'react'
 
+export interface Props {
+  song: Song
+  sources: Source[]
+  sourcesHeader: string
+  hasWikiPhoto: boolean
+  wikiPhotoAttribution: string
+  photo: FlickrPhoto
+  contribution: FlickrContribution
+}
 
-const Song = props => (
+export interface FlickrContribution {
+  ownerName: string
+  ownerUrl: string
+  photoTitle: string
+  photoUrl: string
+  licenseName: string
+  licenseUrl: string
+}
+
+const SongPage = (props: PropsWithChildren<Props>) => (
   <Layout>
     <Head>
       <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
@@ -44,7 +64,7 @@ const Song = props => (
         {props.sources && props.sources.length > 0 ? (
           <div>
             <p className="song-sources">{props.sourcesHeader}</p>
-            {props.sources.map((s) =>
+            {props.sources.map((s: Source) =>
               <Link href={s.url} as={s.url} key={s.url} passHref>{s.name}</Link>
             )}
           </div>
@@ -55,7 +75,7 @@ const Song = props => (
           </div>
         ) : (<p />)}
         {props.song.tags ? (
-          <div className="song-tags">{props.song.tags.map(t => t.name).join(', ')}</div>
+          <div className="song-tags">{props.song.tags.map((t: Tag) => t.name).join(', ')}</div>
         ) : (
           <p />
         )}
@@ -71,7 +91,7 @@ const Song = props => (
       <aside className="song-photos">
         {props.hasWikiPhoto ? (
           <div>
-            <Image width="100%" height="100%" layout="responsive" objectFit="contain" priority={true} 
+            <Image width="100%" height="100%" layout="responsive" objectFit="contain" priority={true}
               src={`https://images.voornameninliedjes.nl/${props.song.localImage}`} alt={props.song.artist}
               placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mP8P5HhHAMRgHFUIX0VAgCwHRe3uuy9GgAAAABJRU5ErkJggg=="
             />
@@ -248,10 +268,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
     'licenseUrl': ''
   }
 
-  const artist = context.params.artist
-  const title = context.params.title
+  const artist = context.query.artist
+  const title = context.query.title
   const res = await fetch(`${API}${artist}/${title}`)
-  const song = await res.json()
+  const song: Song = await res.json()
 
   if (song.wikimediaPhotos.length > 0) {
     const wikiPhoto = song.wikimediaPhotos[0]
@@ -260,7 +280,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     wikiPhotoAttribution = wikiPhoto.attribution
   } else {
     const flickrPhoto = song.flickrPhotos[0]
-    photo = flickrPhoto
     contribution = {
       'ownerName': flickrPhoto.owner.username,
       'ownerUrl': flickrPhoto.owner.photoUrl,
@@ -279,4 +298,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
   return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, sources, sourcesHeader } }
 }
 
-export default Song
+export default SongPage

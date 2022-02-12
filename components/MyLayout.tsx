@@ -2,12 +2,16 @@ import { Header } from './Header'
 import Aside from './Aside'
 import Footer from './Footer'
 import ScriptHeader from './ScriptHeader'
+import { PropsWithChildren } from 'react'
 
 const layoutStyle = {
   // styling here
 }
 
-export default function Layout(props) {
+interface Props {
+}
+
+export default function Layout(props: PropsWithChildren<Props>) {
 
   // TODO move headers etc here, create Footer component and move header component to Header.js
 

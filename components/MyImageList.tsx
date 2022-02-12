@@ -6,13 +6,19 @@ import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
 import Tooltip from '@mui/material/Tooltip'
 import Masonry from '@mui/lab/Masonry'
+import { Song } from '../types/song'
+import { PropsWithChildren } from 'react'
 
-export default function Songrow(props) {
+interface Props {
+  songs: Song[]
+}
+
+export default function Songrow(props: PropsWithChildren<Props>) {
 
   return (
     <div className="image-list">
       <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={1}>
-        {props.songs?.length && props.songs.map((song, index) => (
+        {props.songs?.length && props.songs.map((song: Song, index: number) => (
           <div className="detail-song" key={index}>
             <Link href="/[artist]/[title]" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.replace('?', '').replace('#', '').toLowerCase())}`} passHref>
               <ImageListItem>
