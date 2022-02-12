@@ -6,20 +6,29 @@ import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
 import { useRouter } from 'next/router'
 import { isEqual } from 'lodash-es'
+import { PropsWithChildren } from 'react'
+import { Song } from '../types/song'
+import { GetServerSideProps } from 'next'
 
-function Index(props) {
+export interface Props {
+  currSel: string
+  chars: string[]
+  songs: Song[]
+}
+
+function Index(props: PropsWithChildren<Props>) {
 
   const router = useRouter()
 
-  const chipColor = (t) => {
+  const chipColor = (t: string) => {
     const a = props.currSel.split(',').sort()
     const b = t.split('').sort()
     return isEqual(a, b) ? 'primary' : 'secondary'
   }
 
-  const handleClick = (e) => {
+  const handleClick = (pageChars: string) => {
     router.push({
-      query: { characters: e.pageChars.split('').join(',') }
+      query: { characters: pageChars.split('').join(',') }
     })
   }
 
@@ -36,7 +45,7 @@ function Index(props) {
           <div className="chips">
             <Stack direction="row" spacing={1}>
               {props.chars && props.chars.map(pageChars =>
-                <Chip label={pageChars} key={pageChars} onClick={() => handleClick({ pageChars })} color={chipColor(pageChars)} />
+                <Chip label={pageChars} key={pageChars} onClick={() => handleClick(pageChars)} color={chipColor(pageChars)} />
               )}
             </Stack>
           </div>
@@ -71,8 +80,8 @@ function Index(props) {
   )
 };
 
-export async function getServerSideProps({ query }) {
-  const selectedChars = query.characters ? query.characters : 'a,b,c'
+export const getServerSideProps: GetServerSideProps = async context => {
+  const selectedChars = context.query.characters ? context.query.characters : 'a,b,c'
   const charsPerPage = ['abc', 'def', 'ghi', 'jkl', 'mno', 'pqr', 'stu', 'vwxyz']
 
   const res = await fetch(`https://api.voornameninliedjes.nl/songs?first-characters=${selectedChars}`)
@@ -82,7 +91,7 @@ export async function getServerSideProps({ query }) {
 
   return {
     props: {
-      songs: data.map(entry => entry),
+      songs: data,
       chars: charsPerPage,
       currSel: selectedChars
     }
