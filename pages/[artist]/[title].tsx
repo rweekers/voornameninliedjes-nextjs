@@ -9,8 +9,10 @@ import Tooltip from '@mui/material/Tooltip'
 import { GetServerSideProps } from 'next'
 import { Song, Source, Tag, FlickrPhoto } from '../../types/song'
 import { PropsWithChildren } from 'react'
+import Script from 'next/script'
 
 export interface Props {
+  error: string
   song: Song
   sources: Source[]
   sourcesHeader: string
@@ -31,84 +33,94 @@ export interface FlickrContribution {
 
 const SongPage = (props: PropsWithChildren<Props>) => (
   <Layout>
-    <Head>
-      <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      <meta name="description" content={`Informatie over het lied / nummer ${props.song.title} van ${props.song.artist}`}></meta>
-      <script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></script>
-    </Head>
-    <div className="song-detail">
-      <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
-      <div className="song-text">
-        {props.song.background ? (
-          <div>
-            <p className="song-background">Achtergrond</p>
-            <Markdown >{props.song.background}</Markdown>
-          </div>
-        ) : props.song.wikipediaNl ? (
-          <div>
-            <p className="song-background">Achtergrond</p>
-            <Markdown >{props.song.wikipediaNl}</Markdown>
-          </div>
-        ) : props.song.wikipediaSummaryEn ? (
-          <div>
-            <p className="song-background">Achtergrond <Tooltip title="Geen Nederlandse achtergrond"><LanguageIcon /></Tooltip></p>
-            <Markdown >{props.song.wikipediaSummaryEn}</Markdown>
-          </div>
-        ) : (
-          <div>
-            <p className="song-background">Achtergrond</p>
-            <Markdown >Geen achtergrond gevonden...</Markdown>
-          </div>
-        )}
-        {props.sources && props.sources.length > 0 ? (
-          <div>
-            <p className="song-sources">{props.sourcesHeader}</p>
-            {props.sources.map((s: Source) =>
-              <Link href={s.url} as={s.url} key={s.url} passHref>{s.name}</Link>
-            )}
-          </div>
-        ) : (<p />)}
-        {props.song.albumName ? (
-          <div>
-            <div className="song-lastfm">Album: {props.song.albumName}</div>
-          </div>
-        ) : (<p />)}
-        {props.song.tags ? (
-          <div className="song-tags">{props.song.tags.map((t: Tag) => t.name).join(', ')}</div>
-        ) : (
-          <p />
-        )}
-      </div>
-      <aside className="song-spotify">
-        <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allow="encrypted-media"></iframe>
-      </aside>
-      {props.song.youtube ? (
-        <aside className="song-youtube">
-          <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
+    <Script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></Script>
+    {/* Checking if the song is properly fetched, otherwise show error heading */}
+    {!props.error ? (
+      <Head>
+        <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content={`Informatie over het lied / nummer ${props.song.title} van ${props.song.artist}`}></meta>
+      </Head>) : (
+      <Head>
+        <title>Fout</title>
+      </Head>
+    )}
+    {/* Checking if the song is properly fetched, otherwise show error heading */}
+    {!props.error ? (
+      <div className="song-detail">
+        <header className="song-title"><h2>{props.song.title}</h2><h1>{props.song.artist}</h1></header>
+        <div className="song-text">
+          {props.song.background ? (
+            <div>
+              <p className="song-background">Achtergrond</p>
+              <Markdown >{props.song.background}</Markdown>
+            </div>
+          ) : props.song.wikipediaNl ? (
+            <div>
+              <p className="song-background">Achtergrond</p>
+              <Markdown >{props.song.wikipediaNl}</Markdown>
+            </div>
+          ) : props.song.wikipediaSummaryEn ? (
+            <div>
+              <p className="song-background">Achtergrond <Tooltip title="Geen Nederlandse achtergrond"><LanguageIcon /></Tooltip></p>
+              <Markdown >{props.song.wikipediaSummaryEn}</Markdown>
+            </div>
+          ) : (
+            <div>
+              <p className="song-background">Achtergrond</p>
+              <Markdown >Geen achtergrond gevonden...</Markdown>
+            </div>
+          )}
+          {props.sources && props.sources.length > 0 ? (
+            <div>
+              <p className="song-sources">{props.sourcesHeader}</p>
+              {props.sources.map((s: Source) =>
+                <Link href={s.url} as={s.url} key={s.url} passHref>{s.name}</Link>
+              )}
+            </div>
+          ) : (<p />)}
+          {props.song.albumName ? (
+            <div>
+              <div className="song-lastfm">Album: {props.song.albumName}</div>
+            </div>
+          ) : (<p />)}
+          {props.song.tags ? (
+            <div className="song-tags">{props.song.tags.map((t: Tag) => t.name).join(', ')}</div>
+          ) : (
+            <p />
+          )}
+        </div>
+        <aside className="song-spotify">
+          <iframe src={`https://open.spotify.com/embed/track/${props.song.spotify}`} className="spotify" width="100%" height="100%" title={props.song.title} frameBorder="0" allow="encrypted-media"></iframe>
         </aside>
-      ) : (<div />)}
-      <aside className="song-photos">
-        {props.hasWikiPhoto ? (
-          <div>
-            <Image width="100%" height="100%" layout="responsive" objectFit="contain" priority={true}
-              src={`https://images.voornameninliedjes.nl/${props.song.localImage}`} alt={props.song.artist}
-              placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mP8P5HhHAMRgHFUIX0VAgCwHRe3uuy9GgAAAABJRU5ErkJggg=="
-            />
-            <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
-          </div>
-        ) : (
-          <div>
-            <Image width="100%" height="100%" layout="responsive" objectFit="contain"
-              src={`https://images.voornameninliedjes.nl/${props.song.localImage}`}
-              alt={props.photo.title}
-              placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mP8P5HhHAMRgHFUIX0VAgCwHRe3uuy9GgAAAABJRU5ErkJggg=="
-            />
-            <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
-          </div>
-        )}
-      </aside>
-    </div>
+        {props.song.youtube ? (
+          <aside className="song-youtube">
+            <iframe src={`https://www.youtube-nocookie.com/embed/${props.song.youtube}?rel=0`} width="100%" height="100%" title={props.song.title}></iframe>
+          </aside>
+        ) : (<div />)}
+        <aside className="song-photos">
+          {props.hasWikiPhoto ? (
+            <div>
+              <Image width="100%" height="100%" layout="responsive" objectFit="contain"
+                src={`https://images.voornameninliedjes.nl/${props.song.localImage}`} alt={props.song.artist}
+                priority={true} quality={100} placeholder="blur" blurDataURL={`data:image/png;base64,${props.song.blurredImage}`}
+              />
+              <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
+            </div>
+          ) : (
+            <div>
+              <Image width="100%" height="100%" layout="responsive" objectFit="contain"
+                src={`https://images.voornameninliedjes.nl/${props.song.localImage}`}
+                alt={props.photo.title}
+                priority={true} quality={100} placeholder="blur" blurDataURL={`data:image/png;base64,${props.song.blurredImage}`}
+              />
+              <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
+            </div>
+          )}
+        </aside>
+      </div>) : (
+      <div><p>{props.error}</p></div>
+    )}
     <style jsx>{`
 .song-detail {
   display: grid;
@@ -270,7 +282,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   const artist = context.query.artist
   const title = context.query.title
+
   const res = await fetch(`${API}${artist}/${title}`)
+
+  // If response is incorrect, only return error message to show a simple error page
+  if (!res.ok) {
+    const artistString = decodeURIComponent(`${artist}`)
+    const titleString = decodeURIComponent(`${title}`)
+    return { props: { error: `Kon ${artistString} - ${titleString} niet vinden` } }
+  }
+
   const song: Song = await res.json()
 
   if (song.wikimediaPhotos.length > 0) {

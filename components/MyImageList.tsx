@@ -20,10 +20,16 @@ export default function Songrow(props: PropsWithChildren<Props>) {
       <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={1}>
         {props.songs?.length && props.songs.map((song: Song, index: number) => (
           <div className="detail-song" key={index}>
-            <Link href="/[artist]/[title]" as={`/${encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())}/${encodeURIComponent(song.title.replace('?', '').replace('#', '').toLowerCase())}`} passHref>
+            <Link href={{
+              pathname: '/[artist]/[title]',
+              query: {
+                artist: encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase()),
+                title: encodeURIComponent(song.title.replace('?', '').replace('#', '').toLowerCase())
+              },
+            }} passHref>
               <ImageListItem>
                 {song.artistImage &&
-                  <Image src={`https://images.voornameninliedjes.nl/${song.localImage}`} alt={song.title} title={song.artistImageAttribution} placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mP8P5HhHAMRgHFUIX0VAgCwHRe3uuy9GgAAAABJRU5ErkJggg==" priority={true} width={song.artistImageWidth} height={song.artistImageHeight} />
+                  <Image src={`https://images.voornameninliedjes.nl/${song.localImage}`} alt={song.title} title={song.artistImageAttribution} placeholder="blur" blurDataURL={`data:image/png;base64,${song.blurredImage}`} priority={true} quality={100} width={song.artistImageWidth} height={song.artistImageHeight} />
                 }
                 <ImageListItemBar
                   title={song.title}
