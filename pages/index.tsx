@@ -9,6 +9,7 @@ import { isEqual } from 'lodash-es'
 import { PropsWithChildren } from 'react'
 import { Song } from '../types/song'
 import { GetServerSideProps } from 'next'
+import Script from 'next/script'
 
 export interface Props {
   currSel: string
@@ -34,12 +35,12 @@ function Index(props: PropsWithChildren<Props>) {
 
   return (
     <Layout>
+      <Script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></Script>
       <div>
         <Head>
           <title>Voornamen in liedjes</title>
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
           <meta name="description" content="Website met informatie over liedjes (nummers) die een voornaam in de titel hebben."></meta>
-          <script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></script>
         </Head>
         <slot className="app-section">
           <div className="chips">

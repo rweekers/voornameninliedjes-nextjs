@@ -6,6 +6,7 @@ export class Song {
     artistImageAttribution: string
     artistImageWidth: number
     artistImageHeight: number
+    blurredImage: string
     localImage: string
     background: string
     wikipediaPage: string
@@ -19,7 +20,7 @@ export class Song {
     sources: Source[]
     tags: Tag[]
 
-    constructor(artist: string, title: string, hasDetails: boolean, artistImage: string, artistImageAttribution: string, artistImageWidth: number, artistImageHeight: number, localImage: string, background: string, wikipediaPage: string, wikipediaNl: string, wikipediaSummaryEn: string, youtube: string, spotify: string, albumName: string, wikimediaPhotos: WikimediaPhoto[], flickrPhotos: FlickrPhoto[], sources: Source[], tags: Tag[]) {
+    constructor(artist: string, title: string, hasDetails: boolean, artistImage: string, artistImageAttribution: string, artistImageWidth: number, artistImageHeight: number, blurredImage: string, localImage: string, background: string, wikipediaPage: string, wikipediaNl: string, wikipediaSummaryEn: string, youtube: string, spotify: string, albumName: string, wikimediaPhotos: WikimediaPhoto[], flickrPhotos: FlickrPhoto[], sources: Source[], tags: Tag[]) {
         this.artist = artist
         this.title = title
         this.hasDetails = hasDetails
@@ -27,6 +28,7 @@ export class Song {
         this.artistImageAttribution = artistImageAttribution
         this.artistImageWidth = artistImageWidth
         this.artistImageHeight = artistImageHeight
+        this.blurredImage = blurredImage
         this.localImage = localImage
         this.background = background
         this.wikipediaPage = wikipediaPage
