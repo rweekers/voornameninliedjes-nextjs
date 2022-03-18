@@ -36,6 +36,7 @@ function Index(props: PropsWithChildren<Props>) {
   return (
     <Layout>
       <Script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></Script>
+      <Script async defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c50a6ab42ece4a1babb450ed97fed06c"}'></Script>
       <div>
         <Head>
           <title>Voornamen in liedjes</title>
