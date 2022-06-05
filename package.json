@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "preexport": "npm run build",
+    "preexport": "yarn run build",
     "export": "next export",
-    "prestart": "npm run export",
+    "prestart": "yarn run export",
     "start": "serve out",
     "lint": "next lint"
   },
