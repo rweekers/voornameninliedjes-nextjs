@@ -45,7 +45,12 @@ function Index(props: PropsWithChildren<Props>) {
         <slot className="app-section">
           <div className="chips">
             <Stack direction="row" spacing={1}>
-              {props.chars && props.chars.map(pageChars =>
+              {props.chars && props.chars.slice(0, 13).map(pageChars =>
+                <Chip label={pageChars} key={pageChars} onClick={() => handleClick(pageChars)} color={chipColor(pageChars)} />
+              )}
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              {props.chars && props.chars.slice(13).map(pageChars =>
                 <Chip label={pageChars} key={pageChars} onClick={() => handleClick(pageChars)} color={chipColor(pageChars)} />
               )}
             </Stack>
@@ -83,7 +88,7 @@ function Index(props: PropsWithChildren<Props>) {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const selectedChars = context.query.characters ? context.query.characters : 'a,b,c'
-  const charsPerPage = ['abc', 'def', 'ghi', 'jkl', 'mno', 'pqr', 'stu', 'vwxyz']
+  const charsPerPage = ['ab', 'cdef', 'ghi', 'j', 'kl', 'm', 'nopqr', 'stuv', 'wxyz']
 
   const res = await fetch(`https://api.voornameninliedjes.nl/songs?first-characters=${selectedChars}`)
   const data = await res.json()

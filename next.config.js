@@ -4,6 +4,9 @@ const range = (start, stop, step) => Array.from({ length: (stop - start) / step 
 const farmIds = range(1, 20, 1)
 
 module.exports = {
+  experimental: {
+    outputStandalone: true,
+  },
   trailingSlash: true,
   images: {
     domains: ['upload.wikimedia.org', 'images.voornameninliedjes.nl'].concat(farmIds.map(farmId => `farm${farmId}.staticflickr.com`)),
