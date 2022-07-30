@@ -100,19 +100,32 @@ const SongPage = (props: PropsWithChildren<Props>) => (
         ) : (<div />)}
         <aside className="song-photos">
           {props.hasWikiPhoto ? (
-            <div>
-              <Image width="100%" height="100%" layout="responsive" objectFit="contain"
-                src={`https://images.voornameninliedjes.nl/${props.song.localImage}`} alt={props.song.artist}
-                priority={true} quality={100} placeholder="blur" blurDataURL={`data:image/png;base64,${props.song.blurredImage}`}
+            // TODO Bereken hoogte (aan de hand van div width ipv hard-coded 470?)
+            <div id="test" style={{ position: 'relative', width: '100%', height: props.song.artistImageHeight / props.song.artistImageHeight * 470 }}>
+              <Image
+                alt={props.song.artist}
+                src={`https://images.voornameninliedjes.nl/${props.song.localImage}`}
+                placeholder="blur" 
+                blurDataURL={`data:image/png;base64,${props.song.blurredImage}`}
+                fill
+                style={{
+                  objectFit: 'contain',
+                }}
               />
               <div className="attribution"><p>{props.wikiPhotoAttribution}</p></div>
             </div>
           ) : (
-            <div>
-              <Image width="100%" height="100%" layout="responsive" objectFit="contain"
-                src={`https://images.voornameninliedjes.nl/${props.song.localImage}`}
+            <div style={{ position: 'relative' }}>
+              <Image
                 alt={props.photo.title}
-                priority={true} quality={100} placeholder="blur" blurDataURL={`data:image/png;base64,${props.song.blurredImage}`}
+                src={`https://images.voornameninliedjes.nl/${props.song.localImage}`}
+                placeholder="blur" 
+                blurDataURL={`data:image/png;base64,${props.song.blurredImage}`}
+                width={props.song.artistImageWidth}
+                height={props.song.artistImageHeight}
+                style={{
+                  objectFit: 'contain',
+                }}
               />
               <div className="attribution"><a href={props.contribution.photoUrl} target="_blank" rel="noopener noreferrer">Photo</a> by <a href={props.contribution.ownerUrl} target="_blank" rel="noopener noreferrer">{props.contribution.ownerName}</a> / <a href={props.contribution.licenseUrl} target="_blank" rel="noopener noreferrer">{props.contribution.licenseName}</a></div>
             </div>
