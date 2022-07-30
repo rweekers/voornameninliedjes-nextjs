@@ -57,3 +57,21 @@ html {
   background-color: darkorange !important;
   color: white !important;
 }
+
+.MuiAutocomplete-input {
+  background-color: white;
+  color: black;
+}
+
+.listlink {
+  text-decoration: none;
+  color: orange;
+}
+
+.listlink:hover {
+  color: orange;
+}
+
+.listlink:visited {
+  color: grey;
+}
