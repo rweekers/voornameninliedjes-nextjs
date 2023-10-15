@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Script from 'next/script'
 import { PropsWithChildren, useEffect } from 'react'
 import { Song } from '../types/song'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { map, filter, switchMap, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
@@ -22,16 +22,19 @@ function Index(props: PropsWithChildren<Props>) {
   const [typing, setTyping] = useState(false)
   const [searching, setSearching] = useState(false)
 
+  // elem ref
+  const searchBox = useRef<HTMLInputElement>(null)
+
   useEffect(() => {
-    // elem ref
-    const searchBox: any = document.getElementById('search')
+    if (searchBox.current) {
+      searchBox.current.focus()
 
-    // streams
-    const input$ = fromEvent(searchBox, 'keyup')
-      .pipe(
-        map((i: any) => i.currentTarget.value))
+      // streams
+      const input$ = fromEvent(searchBox.current, 'keyup')
+        .pipe(
+          map((i: any) => i.currentTarget.value))
 
-    input$
+      input$
         .pipe(
           distinctUntilChanged(),
           filter(e => e.length > 0)
@@ -40,51 +43,60 @@ function Index(props: PropsWithChildren<Props>) {
           setSearching(false)
         })
 
-    const filteredInput$ = input$
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged())
+      const filteredInput$ = input$
+        .pipe(
+          debounceTime(500),
+          distinctUntilChanged())
 
-    filteredInput$
+      filteredInput$
         .pipe(
           filter(e => e.length > 1)
         )
         .subscribe(e => {
           setTyping(false)
           setSearching(true)
-      })
+        })
 
-    filteredInput$
-      .pipe(
-        filter(e => e.length <= 1)
-      )
-      .subscribe(e => {
-        setTyping(false)
-    })
+      filteredInput$
+        .pipe(
+          filter(e => e.length <= 1)
+        )
+        .subscribe(e => {
+          setTyping(false)
+          setSuggestionIndex(0)
+        })
 
-    filteredInput$
-      .pipe(
-        filter(e => e.length > 1),
-        map((query) => `https://api.voornameninliedjes.nl/songs?first-character=${query}`),
-        switchMap((query) => ajax(query)),
-        filter(e => e.status === 200),
-        map(e => e.response)
-      )
-      .subscribe(e => {
-        showSuggestions(e as Song[])
-        setSearching(false)
-      })
+      filteredInput$
+        .pipe(
+          filter(e => e.length > 1),
+          map((query) => `https://api.voornameninliedjes.nl/songs?first-character=${query}`),
+          switchMap((query) => ajax(query)),
+          filter(e => e.status === 200),
+          map(e => e.response)
+        )
+        .subscribe(e => {
+          showSuggestions(e as Song[])
+          setSearching(false)
+        })
 
-    input$
+      input$
         .subscribe(query => setQuery(query))
+    }
   }, [])
+  
+
 
   const showSuggestions = (e: Song[]) => {
-    setSongList(e)
+    const songList = e.length > 15 ? e.slice(0, 15) : e
+    setSongList(songList)
   }
 
   const navigateToSong = (song: Song) => {
-    const s = `${song.artist}/${song.title}`.toLowerCase()
+    const artist = encodeURIComponent(song.artist.replace('?', '').replace('/', '').toLowerCase())
+    const title = encodeURIComponent(song.title.replace('?', '').replace('#', '').toLowerCase())
+
+    const s = `${artist}/${title}`.toLowerCase()
+
     router.push({
       pathname: (`/${s}`)
     })
@@ -106,6 +118,16 @@ function Index(props: PropsWithChildren<Props>) {
     if (e.key === 'Enter') {
       navigateToSong(songList[suggestionIndex])
     }
+
+    if (e.key === 'Escape') {
+      setSearching(false)
+      setSuggestionIndex(0)
+      setTyping(false)
+      setQuery('')
+      if (searchBox && searchBox.current) {
+        searchBox.current.value = ''
+      }
+    }
   }
 
   return (
@@ -114,13 +136,13 @@ function Index(props: PropsWithChildren<Props>) {
       <div>
         <Head>
           <title>Voornamen in liedjes</title>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=0" />
           <meta name="description" content="Website met informatie over liedjes (nummers) die een voornaam in de titel hebben."></meta>
         </Head>
         <slot >
           <span>Zoek op een voornaam:</span>
             <div className="filter">
-                <input id="search" className={`filterInput ${typing ? 'filterInputSearching' : ''}`} type="text" placeholder="Zoek op een voornaam..." autoComplete="off"
+                <input id="search" ref={searchBox} className={`filterInput ${typing ? 'filterInputSearching' : ''}`} type="text" placeholder="Zoek op een voornaam..." autoComplete="off"
                   style={{
                     backgroundColor: 'white',
                     width: '80%'
@@ -167,7 +189,8 @@ function Index(props: PropsWithChildren<Props>) {
 
 @media (max-width: 480px) {
   .filter {
-    width: 300px;
+    width: 350px;
+    left: 4%;
   }
 }
 

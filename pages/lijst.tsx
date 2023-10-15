@@ -5,14 +5,15 @@ import MyImageList from '../components/MyImageList'
 import Chip from '@mui/material/Chip'
 import Stack from '@mui/material/Stack'
 import { useRouter } from 'next/router'
-import { PropsWithChildren } from 'react'
 import { Song } from '../types/song'
 import { GetServerSideProps } from 'next'
 import Script from 'next/script'
 import { Subject } from 'rxjs'
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs'
-import { useEffect, useRef } from 'react'
+import { PropsWithChildren, useEffect, useRef, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+type ElementWithBoolean = [React.MutableRefObject<HTMLElement | null>, boolean]
 
 export interface Props {
   songs: Song[],
@@ -28,12 +29,31 @@ function List(props: PropsWithChildren<Props>) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const buttonPreviousRef = useRef<HTMLDivElement  | null>(null)
   const buttonNextRef = useRef<HTMLDivElement  | null>(null)
+
+  let index = useMemo(() => {
+    return 0
+  }, [])
+
+  const elementsWithBoolean: ElementWithBoolean[] = useMemo(() => {
+    return [
+      [inputRef, true],
+      [buttonPreviousRef, false],
+      [buttonNextRef, true],
+    ]
+  }, [inputRef, buttonPreviousRef, buttonNextRef])
   
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus()
+    const setBoolean = (index: number, active: boolean) => {
+      elementsWithBoolean[index][1] = active
     }
-  }, [])
+
+    setBoolean(1, !props.firstPage)
+    setBoolean(2, !props.lastPage)
+
+    if (inputRef.current) {
+      elementsWithBoolean[index][0].current?.focus()
+    }
+  }, [elementsWithBoolean, props.firstPage, props.lastPage, index, router])
 
   const subject = new Subject<string>()
   subject
@@ -77,31 +97,34 @@ function List(props: PropsWithChildren<Props>) {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Tab') {
+    if (e.key === 'Tab' && e.shiftKey) {
       e.preventDefault()
-      if (document.activeElement === inputRef.current) {
-        console.log(`Value fp ${props.firstPage} and lp ${props.lastPage}`)
-        if (props.firstPage) {
-          if (!props.lastPage) {
-            console.log('1')
-            buttonNextRef.current?.focus()
-          } else {
-            console.log('2')
-            inputRef.current?.focus()
-          }
-        } else {
-          console.log('3')
-          buttonPreviousRef.current?.focus()
-        }
-      } else if (document.activeElement === buttonPreviousRef.current) {
-        if (props.lastPage) {
-          inputRef.current?.focus()
-        } else {
-          buttonNextRef.current?.focus()
-        }
-      } else {
-        inputRef.current?.focus()
-      }
+      do {
+        decreaseIndex()
+      } while(elementsWithBoolean[index][1] == false)
+      elementsWithBoolean[index][0].current?.focus()
+    } else if (e.key === 'Tab') {
+      e.preventDefault()
+      do {
+        increaseIndex()
+      } while(elementsWithBoolean[index][1] == false)
+      elementsWithBoolean[index][0].current?.focus()
+    }
+  }
+
+  const increaseIndex = () => {
+    if (index + 1 > elementsWithBoolean.length - 1) {
+      index = 0
+    } else {
+      index++
+    }
+  }
+
+  const decreaseIndex = () => {
+    if (index - 1 < 0) {
+      index = elementsWithBoolean.length - 1
+    } else {
+      index--
     }
   }
 
@@ -115,6 +138,7 @@ function List(props: PropsWithChildren<Props>) {
             '&:hover, &:focus': {
               // Some CSS
               outline: '3px solid gray',
+              outlineOffset: '-2px'
             },
           },
         },
@@ -129,7 +153,7 @@ function List(props: PropsWithChildren<Props>) {
       <div>
         <Head>
           <title>Voornamen in liedjes</title>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=0" />
           <meta name="description" content="Website met informatie over liedjes (nummers) die een voornaam in de titel hebben."></meta>
         </Head>
         <slot className="app-section" onKeyDown={handleKeyDown}>
@@ -201,9 +225,6 @@ function List(props: PropsWithChildren<Props>) {
 }
 .filterInput::placeholder {
   opacity: 0.6;
-}
-.filterInput:focus {
-  outline: 3px solid gray;
 }
     `}</style>
     </Layout>

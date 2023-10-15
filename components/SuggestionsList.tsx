@@ -68,7 +68,6 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
     border: 1px solid #999;
     list-style: none;
     margin-top: 0;
-    // max-height: 143px;
     overflow-y: auto;
     padding-left: 0;
     width: calc(300px + 1rem);
@@ -85,11 +84,10 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
   
   @media (max-width: 480px) {
     .suggestions {
-      font-size: 0.5em;
       width: calc(200px + 1rem);
     }
     .suggestions-list {
-      left: 12%;
+      left: 17%;
     }
   }
 
