@@ -38,7 +38,7 @@ const SongPage = (props: PropsWithChildren<Props>) => (
     {!props.error ? (
       <Head>
         <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=0" />
         <meta name="description" content={`Informatie over het lied / nummer ${props.song.title} van ${props.song.artist}`}></meta>
       </Head>) : (
       <Head>
