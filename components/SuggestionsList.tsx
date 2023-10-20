@@ -58,7 +58,7 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
     position: absolute;
     z-index: 2;
     top: 100%;
-    left: 18%;
+    left: 19%;
 }
 .suggestions {
     color: white; 
@@ -70,7 +70,7 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
     margin-top: 0;
     overflow-y: auto;
     padding-left: 0;
-    width: calc(300px + 1rem);
+    width: calc(400px + 1rem);
 }
 
 @media (max-width: 768px) {
@@ -87,7 +87,7 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
       width: calc(200px + 1rem);
     }
     .suggestions-list {
-      left: 17%;
+      left: 20%;
     }
   }
 

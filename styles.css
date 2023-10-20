@@ -9,14 +9,6 @@ html {
   font-size: 62.5%; /* font-size 1em = 10px on default browser settings */ 
 }
 
-/* .MuiImageListItemBar-root {
-  height: 100%;
-}
-
-.MuiImageListItemBar-root:hover {
-  height: 30%;
-} */
-
 .MuiImageListItemBar-title {
   font-weight: 300 !important;
   font-size: 1.8rem !important;
