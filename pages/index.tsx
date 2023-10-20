@@ -181,16 +181,21 @@ function Index(props: PropsWithChildren<Props>) {
 @media (max-width: 768px) {
   .filter {
     width: 400px;
-  }
-  .filterInput {
-    left: 6%;
+    left: 3%;
   }
 }
 
 @media (max-width: 480px) {
   .filter {
-    width: 350px;
-    left: 4%;
+    left: 2%;
+    font-size: 1.8em;
+  }
+}
+
+@media (min-width: 768px) {
+  .filter {
+    margin-top: 8%;
+    width: 700px;
   }
 }
 
