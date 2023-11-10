@@ -21,7 +21,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/lab": "^5.0.0-alpha.62",
     "@mui/material": "^5.2.6",
-    "axios": "^0.24.0",
+    "axios": "^1.6.0",
     "follow-redirects": ">=1.14.9",
     "isomorphic-unfetch": "^3.1.0",
     "lodash-es": "^4.17.21",
