@@ -1,3 +1,15 @@
+export class SongPage {
+    songs: Song[]
+    totalItems: number
+    isLast: boolean
+
+    constructor(songs: Song[], totalItems:  number, isLast: boolean) {
+        this.songs = songs
+        this.totalItems = totalItems
+        this.isLast = isLast
+    }
+}
+
 export class Song {
     artist: string
     title: string
@@ -10,17 +22,18 @@ export class Song {
     localImage: string
     background: string
     wikipediaPage: string
-    wikipediaNl: string
-    wikipediaSummaryEn: string
+    wikiContentNl: string
+    wikiSummaryEn: string
+    lastFmAlbum: LastFmAlbum
     youtube: string
     spotify: string
     albumName: string
-    wikimediaPhotos: WikimediaPhoto[]
+    photos: Photo[]
     flickrPhotos: FlickrPhoto[]
     sources: Source[]
     tags: Tag[]
 
-    constructor(artist: string, title: string, hasDetails: boolean, artistImage: string, artistImageAttribution: string, artistImageWidth: number, artistImageHeight: number, blurredImage: string, localImage: string, background: string, wikipediaPage: string, wikipediaNl: string, wikipediaSummaryEn: string, youtube: string, spotify: string, albumName: string, wikimediaPhotos: WikimediaPhoto[], flickrPhotos: FlickrPhoto[], sources: Source[], tags: Tag[]) {
+    constructor(artist: string, title: string, hasDetails: boolean, artistImage: string, artistImageAttribution: string, artistImageWidth: number, artistImageHeight: number, blurredImage: string, localImage: string, background: string, wikipediaPage: string, wikiContentNl: string, wikiSummaryEn: string, lastFmAlbum: LastFmAlbum, youtube: string, spotify: string, albumName: string, photos: Photo[], flickrPhotos: FlickrPhoto[], sources: Source[], tags: Tag[]) {
         this.artist = artist
         this.title = title
         this.hasDetails = hasDetails
@@ -32,15 +45,28 @@ export class Song {
         this.localImage = localImage
         this.background = background
         this.wikipediaPage = wikipediaPage
-        this.wikipediaNl = wikipediaNl
-        this.wikipediaSummaryEn = wikipediaSummaryEn
+        this.wikiContentNl = wikiContentNl
+        this.wikiSummaryEn = wikiSummaryEn
+        this.lastFmAlbum = lastFmAlbum
         this.youtube = youtube
         this.spotify = spotify
         this.albumName = albumName
-        this.wikimediaPhotos = wikimediaPhotos
+        this.photos = photos
         this.flickrPhotos = flickrPhotos
         this.sources = sources
         this.tags = tags
+    }
+}
+
+export class LastFmAlbum {
+    url: string
+    name: string
+    mbid: string
+
+    constructor(url: string, name: string, mbid: string) {
+        this.url = url
+        this.name = name
+        this.mbid = mbid
     }
 }
 
@@ -64,7 +90,7 @@ export class Tag {
     }
 }
 
-export class WikimediaPhoto {
+export class Photo {
     url: string
     attribution: string
 

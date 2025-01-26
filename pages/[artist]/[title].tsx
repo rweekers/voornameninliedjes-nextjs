@@ -3,13 +3,11 @@ import Layout from '../../components/MyLayout'
 import Markdown from 'react-markdown'
 import fetch from 'isomorphic-unfetch'
 import Image from 'next/image'
-import Link from 'next/link'
 import LanguageIcon from '@mui/icons-material/Language'
 import Tooltip from '@mui/material/Tooltip'
 import { GetServerSideProps } from 'next'
 import { Song, Source, Tag, FlickrPhoto } from '../../types/song'
 import { PropsWithChildren } from 'react'
-import Script from 'next/script'
 
 export interface Props {
   error: string
@@ -33,11 +31,10 @@ export interface FlickrContribution {
 
 const SongPage = (props: PropsWithChildren<Props>) => (
   <Layout>
-    <Script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></Script>
     {/* Checking if the song is properly fetched, otherwise show error heading */}
     {!props.error ? (
       <Head>
-        <title>Voornamen in liedjes - {props.song.artist} - {props.song.title}</title>
+        <title>`Voornamen in liedjes - ${props.song.artist} - ${props.song.title}`</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=0" />
         <meta name="description" content={`Informatie over het lied / nummer ${props.song.title} van ${props.song.artist}`}></meta>
       </Head>) : (
@@ -55,15 +52,15 @@ const SongPage = (props: PropsWithChildren<Props>) => (
               <p className="song-background">Achtergrond</p>
               <Markdown >{props.song.background}</Markdown>
             </div>
-          ) : props.song.wikipediaNl ? (
+          ) : props.song.wikiContentNl ? (
             <div>
               <p className="song-background">Achtergrond</p>
-              <Markdown >{props.song.wikipediaNl}</Markdown>
+              <Markdown >{props.song.wikiContentNl}</Markdown>
             </div>
-          ) : props.song.wikipediaSummaryEn ? (
+          ) : props.song.wikiSummaryEn ? (
             <div>
               <p className="song-background">Achtergrond <Tooltip title="Geen Nederlandse achtergrond"><LanguageIcon /></Tooltip></p>
-              <Markdown >{props.song.wikipediaSummaryEn}</Markdown>
+              <Markdown >{props.song.wikiSummaryEn}</Markdown>
             </div>
           ) : (
             <div>
@@ -75,13 +72,17 @@ const SongPage = (props: PropsWithChildren<Props>) => (
             <div>
               <p className="song-sources">{props.sourcesHeader}</p>
               {props.sources.map((s: Source) =>
-                <Link href={s.url} as={s.url} key={s.url} passHref>{s.name}</Link>
+                <div key={s.url}>
+                  <a target="_blank" href={s.url} rel="noopener noreferrer">
+                    {s.name}
+                  </a>
+                </div>
               )}
             </div>
           ) : (<p />)}
-          {props.song.albumName ? (
+          {props.song.lastFmAlbum ? (
             <div>
-              <div className="song-lastfm">Album: {props.song.albumName}</div>
+              <div className="song-lastfm">Album: <a target="_blank" href={props.song.lastFmAlbum.url} rel="noopener noreferrer">{props.song.lastFmAlbum.name}</a></div>
             </div>
           ) : (<p />)}
           {props.song.tags ? (
@@ -277,7 +278,7 @@ const SongPage = (props: PropsWithChildren<Props>) => (
 )
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const API = 'https://api.voornameninliedjes.nl/songs/'
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
 
   let hasWikiPhoto = false
   let wikiPhotoUrl = ''
@@ -296,7 +297,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const artist = context.query.artist
   const title = context.query.title
 
-  const res = await fetch(`${API}${artist}/${title}`)
+  const res = await fetch(`${baseUrl}/songs/${artist}/${title}`,
+      {
+   headers: {
+     Accept: 'application/vnd.voornameninliedjes.songs.v2+json',
+   },
+  })
 
   // If response is incorrect, only return error message to show a simple error page
   if (!res.ok) {
@@ -307,26 +313,25 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   const song: Song = await res.json()
 
-  if (song.wikimediaPhotos.length > 0) {
-    const wikiPhoto = song.wikimediaPhotos[0]
+  if (song.photos.length > 0) {
+    const wikiPhoto = song.photos[0]
     hasWikiPhoto = true
     wikiPhotoUrl = wikiPhoto.url
     wikiPhotoAttribution = wikiPhoto.attribution
-  } else {
-    const flickrPhoto = song.flickrPhotos[0]
-    contribution = {
-      'ownerName': flickrPhoto.owner.username,
-      'ownerUrl': flickrPhoto.owner.photoUrl,
-      'photoTitle': flickrPhoto.title,
-      'photoUrl': flickrPhoto.url,
-      'licenseName': flickrPhoto.license.name,
-      'licenseUrl': flickrPhoto.license.url
-    }
   }
 
-  const background = song.background ? song.background : song.wikipediaNl ? song.wikipediaNl : song.wikipediaSummaryEn ? song.wikipediaSummaryEn : 'Geen achtergrond gevonden...'
+  const background = song.background ? song.background : song.wikiContentNl ? song.wikiContentNl : song.wikiSummaryEn ? song.wikiSummaryEn : 'Geen achtergrond gevonden...'
 
-  const sources = (!song.background && song.wikipediaNl) ? song.sources.concat({ url: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}`, name: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}` }) : song.sources
+  const unfilteredSources = (!song.background && song.wikiContentNl) ? song.sources.concat({ url: `https://nl.wikipedia.org/wiki/${song.wikipediaPage}`, name: song.wikipediaPage }) : song.sources
+
+  const sources = unfilteredSources.filter((_ => {
+    const seen = new Set<string>()
+    return source => {
+      if (seen.has(source.url)) return false
+      seen.add(source.url)
+      return true
+    }
+  })())
   const sourcesHeader = sources && sources.length > 1 ? 'Bronnen' : 'Bron'
 
   return { props: { song, background, hasWikiPhoto, wikiPhotoUrl, wikiPhotoAttribution, photo, contribution, sources, sourcesHeader } }

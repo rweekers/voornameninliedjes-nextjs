@@ -15,10 +15,10 @@ interface Props {
 
 export default function Songrow(props: PropsWithChildren<Props>) {
 
-  return (
+    return (
     <div className="image-list">
       <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} spacing={1}>
-        {props.songs?.length && props.songs.map((song: Song, index: number) => (
+        {props.songs.length && props.songs.map((song: Song, index: number) => (
           <div className="detail-song" key={index}>
             <Link href={{
               pathname: '/[artist]/[title]',
