@@ -2,9 +2,8 @@ import Layout from '../components/MyLayout'
 import SuggestionsList from '../components/SuggestionsList'
 import Head from 'next/head'
 import Link from 'next/link'
-import Script from 'next/script'
 import { PropsWithChildren, useEffect } from 'react'
-import { Song } from '../types/song'
+import { Song, SongPage } from '../types/song'
 import React, { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { map, filter, switchMap, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
@@ -25,7 +24,10 @@ function Index(props: PropsWithChildren<Props>) {
   // elem ref
   const searchBox = useRef<HTMLInputElement>(null)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+
     if (searchBox.current) {
       searchBox.current.focus()
 
@@ -65,14 +67,22 @@ function Index(props: PropsWithChildren<Props>) {
           setTyping(false)
           setSuggestionIndex(0)
         })
-
+        
       filteredInput$
         .pipe(
           filter(e => e.length > 1),
-          map((query) => `https://api.voornameninliedjes.nl/songs?first-character=${query}`),
-          switchMap((query) => ajax(query)),
+          map((query) => `${baseUrl}/songs?name-starts-with=${query}`),
+          switchMap((url) =>
+            ajax<SongPage>({
+              url: url,
+              method: 'GET',
+              headers: {
+                Accept: 'application/vnd.voornameninliedjes.songs.v2+json',
+              },
+            })
+          ),
           filter(e => e.status === 200),
-          map(e => e.response)
+          map(e => e.response.songs)
         )
         .subscribe(e => {
           showSuggestions(e as Song[])
@@ -132,7 +142,6 @@ function Index(props: PropsWithChildren<Props>) {
 
   return (
     <Layout>
-      <Script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></Script>
       <div>
         <Head>
           <title>Voornamen in liedjes</title>
@@ -156,7 +165,7 @@ function Index(props: PropsWithChildren<Props>) {
 
             </div>
           <span>Of blader door de </span>
-          <Link href='/lijst' legacyBehavior passHref><a className="listlink">lijst</a></Link>
+          <Link href='/lijst' className='listlink' passHref>lijst</Link>
         </slot>
       </div>
 

@@ -7,9 +7,8 @@ import Stack from '@mui/material/Stack'
 import { useRouter } from 'next/router'
 import { Song } from '../types/song'
 import { GetServerSideProps } from 'next'
-import Script from 'next/script'
 import { Subject } from 'rxjs'
-import { filter, debounceTime, distinctUntilChanged } from 'rxjs'
+import { debounceTime, distinctUntilChanged } from 'rxjs'
 import { PropsWithChildren, useEffect, useRef, useMemo } from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
@@ -59,7 +58,6 @@ function List(props: PropsWithChildren<Props>) {
   subject
     .pipe(
       debounceTime(750),
-      filter(e => e.length != 1),
       distinctUntilChanged()
     )
     .subscribe(value =>     router.push({
@@ -149,7 +147,6 @@ function List(props: PropsWithChildren<Props>) {
 
   return (
     <Layout>
-      <Script async defer data-domain="voornameninliedjes.nl" src="https://analytics.voornameninliedjes.nl/js/plausible.js"></Script>
       <div>
         <Head>
           <title>Voornamen in liedjes</title>
@@ -232,20 +229,31 @@ function List(props: PropsWithChildren<Props>) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
 
   const pageNumber: number = context.query.pageNumber ? Number(context.query.pageNumber) : 0
+  const limit = 30
+  const offset = pageNumber * limit
   const queryString = context.query.queryString ? context.query.queryString : ''
 
-  const res = await fetch(`https://api.voornameninliedjes.nl/songs?name-starts-with=${queryString}&page-number=${pageNumber}`)
-  const data = await res.json()
+  const isFirst = pageNumber === 0
 
-  const songs = data.content ? data.content : []
+  const res = await fetch(`${baseUrl}/songs?${queryString ? `name-starts-with=${queryString}&` : ''}offset=${offset}&limit=${limit}`,
+  {
+   headers: {
+     Accept: 'application/vnd.voornameninliedjes.songs.v2+json',
+   },
+  })
+
+  const songPage = await res.json()
+  const songs = songPage.songs
+  const isLast = songPage.isLast
 
   return {
     props: {
       songs: songs,
-      firstPage: data.first,
-      lastPage: data.last,
+      firstPage: isFirst,
+      lastPage: isLast,
       pageNumber: pageNumber,
       query: queryString
     }

@@ -2,7 +2,7 @@ const fs = require('fs')
 const prettier = require('prettier')
 const { DateTime } = require('luxon')
 
-const EXTERNAL_DATA_URL = 'https://api.voornameninliedjes.nl/songs'
+const EXTERNAL_DATA_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/songs`
 const EXTERNAL_BASE_URL = 'https://www.voornameninliedjes.nl'
 
 const createSitemap = (songs) =>
