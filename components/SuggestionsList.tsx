@@ -4,6 +4,7 @@ import { PropsWithChildren, useEffect, useState } from 'react'
 interface Props {
     show: boolean
     songs: Song[]
+    aboveLimit: boolean
     selectSong: (song: Song) => void
     suggestionIndex: number
     onSuggestionIndexChange: (i: number) => void
@@ -46,6 +47,13 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
 
                         return (<li key={songKey} className={className} onMouseOver={() => handleMouseOver(idx)} onClick={() => props.selectSong(song)}>{song.artist} - {song.title}</li>)
                     })}
+
+                    {props.aboveLimit && (
+                        <li key="more-suggestions" className="above-limit">
+                            -- Meer resultaten beschikbaar --
+                        </li>
+                    )}
+
                 </ul>)
                 : (
                     <ul className="suggestions not-found">
@@ -63,7 +71,7 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
 .suggestions {
     color: white; 
     font-family: Roboto, Open Sans, sans-serif;
-    font-size: 0.6em;
+    font-size: 0.5em;
     font-weight: 300;
     border: 1px solid #999;
     list-style: none;
@@ -106,8 +114,16 @@ export default function SuggestionsList(props: PropsWithChildren<Props>) {
 }
 
 .not-found {
-    color: grey;
+    color: lightgrey;
     font-style: italic;
+    font-size: 0.4em;
+    font-weight: 200;
+}
+.above-limit {
+    color: lightgrey;
+    font-style: italic;
+    font-size: 0.7em;
+    font-weight: 200;
 }
         `}
             </style>
