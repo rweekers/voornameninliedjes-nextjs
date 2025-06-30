@@ -17,12 +17,15 @@ function Index(props: PropsWithChildren<Props>) {
 
   const [query, setQuery] = useState('')
   const [songList, setSongList] = useState<Song[]>([])
+  const [aboveLimit, setAboveLimit] = useState(false)
   const [suggestionIndex, setSuggestionIndex] = useState(0)
   const [typing, setTyping] = useState(false)
   const [searching, setSearching] = useState(false)
 
   // elem ref
   const searchBox = useRef<HTMLInputElement>(null)
+
+  const suggestionLimit = 10
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -43,6 +46,7 @@ function Index(props: PropsWithChildren<Props>) {
         ).subscribe(_ => {
           setTyping(true)
           setSearching(false)
+          setAboveLimit(false)
         })
 
       const filteredInput$ = input$
@@ -71,7 +75,7 @@ function Index(props: PropsWithChildren<Props>) {
       filteredInput$
         .pipe(
           filter(e => e.length > 1),
-          map((query) => `${baseUrl}/songs?name-starts-with=${query}`),
+          map((query) => `${baseUrl}/songs?name-starts-with=${query}&limit=${suggestionLimit + 1}`),
           switchMap((url) =>
             ajax<SongPage>({
               url: url,
@@ -97,7 +101,11 @@ function Index(props: PropsWithChildren<Props>) {
 
 
   const showSuggestions = (e: Song[]) => {
-    const songList = e.length > 15 ? e.slice(0, 15) : e
+    const songList = e.length > suggestionLimit ? e.slice(0, suggestionLimit) : e
+    if (e.length > suggestionLimit) {
+      setAboveLimit(true)
+    }
+
     setSongList(songList)
   }
 
@@ -160,7 +168,7 @@ function Index(props: PropsWithChildren<Props>) {
                 />
                 <img src="/record_gold.webp" className={`spinner-record ${!searching ? 'hiddenElement' : ''}`} width={25} height={25} alt="logo" />
               { !typing && !searching && 
-              <SuggestionsList songs={songList} show={query.length > 1} selectSong={navigateToSong} onSuggestionIndexChange={(i: number) => setSuggestionIndex(i)} suggestionIndex={suggestionIndex} />
+              <SuggestionsList songs={songList} aboveLimit={aboveLimit} show={query.length > 1} selectSong={navigateToSong} onSuggestionIndexChange={(i: number) => setSuggestionIndex(i)} suggestionIndex={suggestionIndex} />
               }
 
             </div>
