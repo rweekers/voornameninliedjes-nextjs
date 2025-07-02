@@ -229,7 +229,7 @@ function List(props: PropsWithChildren<Props>) {
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+  const baseUrl = process.env.API_BASE_URL
 
   const pageNumber: number = context.query.pageNumber ? Number(context.query.pageNumber) : 0
   const limit = 30
