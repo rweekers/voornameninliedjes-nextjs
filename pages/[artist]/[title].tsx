@@ -278,7 +278,7 @@ const SongPage = (props: PropsWithChildren<Props>) => (
 )
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+  const baseUrl = process.env.API_BASE_URL
 
   let hasWikiPhoto = false
   let wikiPhotoUrl = ''
