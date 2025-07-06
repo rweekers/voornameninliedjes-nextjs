@@ -238,10 +238,19 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   const isFirst = pageNumber === 0
 
+  const userAgent = context.req.headers['user-agent'] ?? ''
+  const referer = context.req.headers['referer'] ?? ''
+  const forwardedFor = context.req.headers['x-forwarded-for'] ?? context.req.socket.remoteAddress ?? '';
+  const acceptLanguage = context.req.headers['accept-language'] ?? '';
+
   const res = await fetch(`${baseUrl}/songs?${queryString ? `name-starts-with=${queryString}&` : ''}offset=${offset}&limit=${limit}`,
   {
    headers: {
-     Accept: 'application/vnd.voornameninliedjes.songs.v2+json',
+      Accept: 'application/vnd.voornameninliedjes.songs.v2+json',
+      'X-User-Agent': Array.isArray(userAgent) ? userAgent[0] : userAgent,
+      'X-Referer': Array.isArray(referer) ? referer[0] : referer,
+      'X-Forwarded-For': Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor,
+      'X-Accept-Language': Array.isArray(acceptLanguage) ? acceptLanguage[0] : acceptLanguage
    },
   })
 
