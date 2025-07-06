@@ -82,6 +82,8 @@ function Index(props: PropsWithChildren<Props>) {
               method: 'GET',
               headers: {
                 Accept: 'application/vnd.voornameninliedjes.songs.v2+json',
+                'X-User-Agent': navigator.userAgent,
+                'X-Referer': window.location.href,
               },
             })
           ),
