@@ -240,8 +240,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   const userAgent = context.req.headers['user-agent'] ?? ''
   const referer = context.req.headers['referer'] ?? ''
-  const forwardedFor = context.req.headers['x-forwarded-for'] ?? context.req.socket.remoteAddress ?? '';
-  const acceptLanguage = context.req.headers['accept-language'] ?? '';
+  const forwardedFor = context.req.headers['x-forwarded-for'] ?? context.req.socket.remoteAddress ?? ''
+  const acceptLanguage = context.req.headers['accept-language'] ?? ''
 
   const res = await fetch(`${baseUrl}/songs?${queryString ? `name-starts-with=${queryString}&` : ''}offset=${offset}&limit=${limit}`,
   {
