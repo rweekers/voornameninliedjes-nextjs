@@ -9,7 +9,7 @@ module.exports = async (phase, { defaultConfig }) => {
       remotePatterns: [new URL('https://images.voornameninliedjes.nl/**')],
     },
     webpack: (config, { isServer }) => {
-      if (isServer) {
+      if (isServer && process.env.GENERATE_SITEMAP !== 'false') {
         require('./scripts/generate-sitemap.js')
       }
 
