@@ -38,6 +38,9 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node:${NODE_VERSION} AS builder
 
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG API_BASE_URL
+
 # Set working directory
 WORKDIR /app
 
@@ -48,6 +51,9 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
 ENV NODE_ENV=production
+
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+ENV API_BASE_URL=${API_BASE_URL:-$NEXT_PUBLIC_API_BASE_URL}
 ENV GENERATE_SITEMAP=false
 
 # Next.js collects completely anonymous telemetry data about general usage.
